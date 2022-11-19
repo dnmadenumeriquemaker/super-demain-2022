@@ -1,0 +1,269 @@
+class Game {
+  constructor() {
+    this.step;
+    this.timer;
+    this.timeCurrent;
+    this.timeMax;
+    this.timeFramecountStart;
+    this.nextBackground;
+    this.nextStep;
+    this.timerBeforeNextAction;
+  }
+
+  init() {
+    this.step = WAITING;
+    clearInterval(this.timer);
+    this.timer = null;
+    this.timeCurrent = 0;
+    this.timeMax = GAME_DURATION;
+    this.timeFramecountStart = 0;
+    this.nextBackground = 'magasin';
+    this.nextStep = null;
+    clearTimeout(this.timerBeforeNextAction);
+    this.timerBeforeNextAction = null;
+    obstacles = [];
+    this.initBackground();
+  }
+
+  tick() {
+    this.timeCurrent++;
+
+    if (this.timeCurrent >= this.timeMax - 2/*plus on augm cette valeur plus la police arrive vite*/) { 
+      // TODO: barrage de police
+      this.setNextStep(PLAYING_END); 
+    }
+
+    if (this.timeCurrent >= this.timeMax) {
+      this.end();
+    }
+  }
+
+  start() {
+    this.timeFramecountStart = frameCount;
+
+    let _this = this;
+    this.timer = setInterval(function() {
+      _this.tick();
+    }, 1000); //pour attendre 1sec/ on remet à 0 le chrono?
+  }
+
+  update() {
+    // No obstacles
+    if (this.timeCurrent <= .5) {
+      // Wait a little
+    }
+    
+    // Some obstacles
+    else if (this.timeCurrent <= 15) {
+      if ((frameCount - this.timeFramecountStart) % 80 == 0) {
+        this.createObstacle();
+      } //frameCount permet de un compteur ( à une vitesse donner) mais la quel ???
+    }
+
+    // More obstacles
+    else if (this.timeCurrent <= 30) {
+      if ((frameCount - this.timeFramecountStart) % 60 == 0) {
+        this.createObstacle();
+      }
+    }
+
+    // Two obstacles at the same time
+    else if (this.timeCurrent <= 40) {
+      if ((frameCount - this.timeFramecountStart) % 85 == 0) { //plus le % est grand plus c' simple
+
+        let wayLeft = 0;
+
+        if (Math.random() < 0.5) {
+          wayLeft = 1;
+        }
+
+        /*
+        let possibleWays = [0, 1, 2];
+        possibleWays = possibleWays.sort((a, b) => 0.5 - Math.random());
+        */
+
+        this.createObstacle('barriere-gauche', wayLeft);
+        this.createObstacle('barriere-droite', wayLeft + 1);
+      }
+    }
+
+    // Last mile
+    else if (this.timeCurrent <= this.timeMax - 5) {
+      if ((frameCount - this.timeFramecountStart) % 55 == 0) {
+        this.createObstacle();
+      }
+    }
+
+    // End of game
+    // TODO: barrage de police
+    else {
+
+    }
+  }
+
+  end() { 
+    clearInterval(this.timer);//retire le timer 
+    this.timer = null;
+    this.setStep(ENDING);
+  }
+
+  show() {
+    rectMode(CORNER);
+
+    if (DEBUG) { //c'est pour si il y a un bug ???
+      push();
+      translate(280, 0);
+      if (player.way == 0) fill('red'); else fill('#C7ECF7');
+      rect(WAYS_X[0], 0, WAY_WIDTH, height);
+      if (player.way == 1) fill('red'); else fill('#C7ECF7');
+      rect(WAYS_X[1], 0, WAY_WIDTH, height);
+      if (player.way == 2) fill('red'); else fill('#C7ECF7');
+      rect(WAYS_X[2], 0, WAY_WIDTH, height);
+      pop();
+    }
+
+  }
+
+  showHUD() {
+
+    let progressionBarMargin = 30;
+
+    fill(255);
+    rect(progressionBarMargin, progressionBarMargin + 40, width - progressionBarMargin * 2, 10);
+
+    let time = map(this.timeCurrent, 0, this.timeMax, 60, width - progressionBarMargin * 2);
+
+    fill(0, 0, 255);
+    rect(progressionBarMargin, progressionBarMargin + 40, time, 10);
+
+    image(images['mini-caddie'], time, progressionBarMargin - 20);
+  }
+
+  setStep(step) {
+    let _this = this;
+    this.step = step;
+    this.nextStep = null;
+
+    if (step == WAITING) {
+      // triggered once
+      game.init();
+    }
+
+    if (step == ONBOARDING_1) {
+      // triggered once
+
+    }
+
+    if (step == ONBOARDING_2) {
+      // triggered once
+
+    }
+
+    if (step == ONBOARDING_3) {
+      this.timerBeforeNextAction = setTimeout(function() {
+        _this.setNextStep(ONBOARDING_4);
+        clearTimeout(this.timerBeforeNextAction);
+      }, 500);
+    }
+
+    if (step == ONBOARDING_4) {
+      clearTimeout(this.timerBeforeNextAction);
+      this.timerBeforeNextAction = setTimeout(function() {
+        _this.setNextStep(ONBOARDING_5);
+        clearTimeout(this.timerBeforeNextAction);
+      }, 3000);
+    }
+
+    if (step == ONBOARDING_5) {
+      clearTimeout(this.timerBeforeNextAction);
+      this.timerBeforeNextAction = setTimeout(function() {
+        _this.setNextStep(PLAYING);
+        clearTimeout(this.timerBeforeNextAction);
+      }, 500);
+    }
+
+    if (step == PLAYING) {
+      // triggered once
+      game.nextBackground = 'route';
+      game.start();
+    }
+
+    if (step == ENDING) {
+      // triggered once
+
+      // TODO: time out 
+      // TODO: impression ticket
+    }
+  }
+
+  setNextStep(nextStep) {
+    this.nextStep = nextStep;
+    this.nextBackground = stepsBackground[nextStep];
+  }
+
+  is(step) {
+    return this.step == step;
+  }
+
+  amende() {
+    return 10000 - (player.hitCount * 150);
+  }
+
+  createObstacle(type = null, way = null) {
+    obstacles.push(new Obstacle(type, way));
+  }
+
+  createBackground(imageName, offset) {
+    backgrounds.push(new Background(imageName, offset));
+  }
+
+  initBackground() {
+    backgrounds = [];
+    this.createBackground(this.nextBackground, height);
+  }
+
+  getCurrentBackground() {
+    return backgrounds[backgrounds.length - 1];
+  }
+
+  updateBackground() {
+    if (backgrounds.length > 0) {
+      let currentBackground = this.getCurrentBackground();
+
+      if (currentBackground.isReadyForNextBackground()) {
+        let nextStep = this.nextStep;
+
+        if (nextStep != null) {
+          this.setStep(nextStep);
+        }
+
+        this.createBackground(
+          this.nextBackground,
+          currentBackground.getOffsetForNextBackground());
+      }
+    } else {
+      this.createBackground('magasin', height);
+      this.nextBackground = 'magasin';
+    }
+  }
+
+  showBackground() {
+    for (let i = backgrounds.length - 1; i >= 0; i--) {
+      let background = backgrounds[i];
+
+      if (!background.isVisible()) {
+        backgrounds.splice(i, 1);
+        continue;
+      }
+      background.update();
+      background.show();
+    }
+  }
+
+  forceStep(step) {
+    game.init();
+    backgrounds = [];
+    game.createBackground(stepsBackground[step], height);
+    game.setStep(step);
+  }
+}
