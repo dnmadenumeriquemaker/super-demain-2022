@@ -123,7 +123,7 @@ function preload() {
   sonImpactVaisseau = loadSound("assets/sonexplosion.wav"); // son explosion de l'asteroide
   // ♬ Chargement deS SONS
   musiqueIntro = loadSound("music/acceuil.mp3");
-  musiqueJeu = loadSound("assets/gamesound.mp3");
+  musiqueJeu = loadSound("assets/Gamesound.mp3");
   musiqueJeu.setVolume(1);
   selection_du_pilote = loadSound("music/selectionpilote.wav"); // ♬ SFX choix pilote
   selection_du_copilote = loadSound("music/selectioncopilote.wav"); // ♬ SFX choix copilote
