@@ -12,8 +12,12 @@ let playerHeadingEasing = 0.05;
 function Player(zoneId, x, y, heading) {
   this.zoneId = zoneId;
   this.score = 0;
+  this.ableToCapture = true;
+
+  this.opacity = 255;
 
   this.hitzoneDiam = 50;
+  this.offsetHitzoneDiam = 200;
 
   // Chaque joueur a sa propre vitesse :
   // this.speed : valeur qui gère la vitesse
@@ -35,6 +39,8 @@ function Player(zoneId, x, y, heading) {
   this.speed3 = playerMaxSpeed / 2 * 2;
   this.speed4 = playerMaxSpeed;
 
+  this.dropZonePos = null;
+
 
   // Joueur à gauche de l'écran
 
@@ -45,6 +51,7 @@ function Player(zoneId, x, y, heading) {
     this.headingMin = -PI;
     this.headingMax = PI;
     this.heading = map(this.a, 0, 1023, this.headingMin, this.headingMax);
+    this.c = color('#F21C74');
 
     this.distSpeed1 = 8; // en dessous de 2 cm
     this.distSpeed2 = 10; // entre 2 et 4 cm
@@ -61,6 +68,7 @@ function Player(zoneId, x, y, heading) {
     this.headingMin = 0;
     this.headingMax = TWO_PI;
     this.heading = map(this.a, 0, 1023, this.headingMin, this.headingMax);
+    this.c = color('#47BEBB');
 
     this.distSpeed1 = 8; // en dessous de 2 cm
     this.distSpeed2 = 10; // entre 2 et 4 cm
@@ -69,6 +77,8 @@ function Player(zoneId, x, y, heading) {
   }
 
   this.update = function () {
+    this.opacity += 10;
+    this.opacity = min(this.opacity, 255);
     // Pour actualiser la position du joueur,
     // on va faire 3 étapes :
 
@@ -109,24 +119,25 @@ function Player(zoneId, x, y, heading) {
     // dans sa zone de jeu
 
     // Si le joueur est trop à gauche de sa zone
-    if (this.pos.x < this.zoneLeft) {
-      this.pos.x = this.zoneRight;
+    if (this.pos.x + this.offsetHitzoneDiam / 2 < this.zoneLeft) {
+      this.pos.x = this.zoneRight + this.offsetHitzoneDiam / 2;
     }
 
     // Si le joueur est trop à droite de sa zone
-    if (this.pos.x > this.zoneRight) {
-      this.pos.x = this.zoneLeft;
+    if (this.pos.x - this.offsetHitzoneDiam / 2 > this.zoneRight) {
+      this.pos.x = this.zoneLeft - this.offsetHitzoneDiam / 2;
     }
 
     // Si le joueur est trop en haut de sa zone
-    if (this.pos.y < 0) {
-      this.pos.y = height;
+    if (this.pos.y + this.offsetHitzoneDiam / 2 < 0) {
+      this.pos.y = height + this.offsetHitzoneDiam / 2;
     }
 
     // Si le joueur est trop en bas de sa zone
-    if (this.pos.y > height) {
-      this.pos.y = 0;
+    if (this.pos.y - this.offsetHitzoneDiam / 2 > height) {
+      this.pos.y = - this.offsetHitzoneDiam / 2;
     }
+
   };
 
   // On affiche notre joueur
@@ -135,8 +146,34 @@ function Player(zoneId, x, y, heading) {
   this.draw = function () {
     push();
     translate(this.pos.x, this.pos.y);
-    rotate(this.heading);
+
+    let shake = map(this.opacity, 0, 255, radians(15), 0);
+
+    rotate(this.heading + random(-shake, shake));
+
+    if (this.opacity < 255) {
+      tint(255, this.opacity);
+      scale(map(this.opacity, 0, 255, .8, 1));
+    }
+
     image(this.img, -45, 0, 120, 50); // taille de l'image
+
+    // a une batterie sur lui
+    if (this.ableToCapture == false) {
+      push();
+
+      // let ringSize = 40 + cos(frameCount / 10) * 5;
+      // noFill();
+      // strokeWeight(2);
+      // stroke(255);
+      // ellipse(50, 0, ringSize, ringSize);
+
+      let batterySize = map(cos(frameCount / 10), -1, 1, 1, 1.2);
+
+      rotate(radians(180));
+      image(this.capturedItem.img, -35, 0, 20 * batterySize, 50 * batterySize);
+      pop();
+    }
 
     if (DEBUG) {
       noFill();
@@ -153,8 +190,118 @@ function Player(zoneId, x, y, heading) {
     pop();
   };
 
-  this.hasCaptured = function () {
+  this.drawIndicator = function () {
+    let img = indicatorblue;
+
+    if (this.zoneId == 'A') {
+      img = indicatorred;
+    }
+
+    let indicatorPos = null;
+    let indicatorAngle = 0;
+    let indicatorScale = 1;
+
+    if (this.zoneId == 'B' && this.pos.x > width - 80) {
+      indicatorPos = createVector(min(this.pos.x - 50, width - 40), constrain(this.pos.y, 40, height - 40));
+      indicatorAngle = map(this.pos.y, 0, height, 90 - 20, 90 + 20);
+      indicatorScale = constrain(map(this.pos.x, width - 80, width - 50, 0, 1), 0, 1);
+    }
+
+    else if (this.zoneId == 'A' && this.pos.x < 80) {
+      indicatorPos = createVector(max(this.pos.x + 50, 40), constrain(this.pos.y, 40, height - 40));
+      indicatorAngle = map(this.pos.y, 0, height, -90 + 20, -90 - 20);
+      indicatorScale = constrain(map(this.pos.x, 80, 50, 0, 1), 0, 1);
+    }
+
+    else if (this.pos.y > height - 80) {
+      indicatorPos = createVector(this.pos.x, min(this.pos.y - 50, height - 40));
+      indicatorAngle = 180;
+      indicatorScale = constrain(map(this.pos.y, height - 80, height - 50, 0, 1), 0, 1);
+    }
+
+    else if (this.pos.y < 80) {
+      indicatorPos = createVector(this.pos.x, max(this.pos.y + 50, 40));
+      indicatorAngle = 0;
+      indicatorScale = constrain(map(this.pos.y, 80, 50, 0, 1), 0, 1);
+    }
+
+    if (indicatorPos) {
+      push();
+      translate(indicatorPos.x, indicatorPos.y);
+      rotate(radians(indicatorAngle));
+      image(img, 0, 0, 40 * indicatorScale, 40 * indicatorScale);
+      pop();
+    }
+  }
+
+
+  this.drawDropZone = function () {
+    // a une batterie sur lui
+    if (this.ableToCapture == false) {
+      push();
+
+      translate(this.dropZonePos.x, this.dropZonePos.y);
+      rotate(radians(frameCount));
+
+      let dropSize = dropZoneDiam + cos(frameCount / 10) * 10;
+
+      if (this.zoneId == 'A') {
+        image(dropzonered, 0, 0, dropSize, dropSize);
+      } else {
+        image(dropzoneblue, 0, 0, dropSize, dropSize);
+      }
+
+      pop();
+    }
+  };
+
+  this.checkDrop = function () {
+    // S'il a une batterie sur lui
+    if (this.canCapture() == false) {
+      if (p5.Vector.dist(this.pos, this.dropZonePos)
+        <= (this.hitzoneDiam + dropZoneDiam) / 2) {
+        this.capturedItem.drop();
+        this.hasDropped();
+      }
+    }
+  }
+
+  this.checkAsteroid = function () {
+
+    if (p5.Vector.dist(this.pos, asteroidPos)
+      <= (this.hitzoneDiam + asteroidsize) / 2) {
+      this.opacity = 50;
+
+      if (this.canCapture() == false) {
+        this.releaseItem();
+      }
+
+    }
+  }
+
+  this.hasCaptured = function (item) {
+    this.ableToCapture = false;
+    this.capturedItem = item;
+
+    // generate new drop zone
+
+    this.dropZonePos = dropZones[this.zoneId][int(random(dropZones[this.zoneId].length))];
+  }
+
+  this.releaseItem = function () {
+    this.ableToCapture = true;
+    //this.capturedItem.alive = false; // remplacer par new x, y
+    this.capturedItem.resetPosition();
+    this.capturedItem = null;
+  }
+
+  this.hasDropped = function () {
     this.score++;
+    this.ableToCapture = true;
+  }
+
+  this.canCapture = function () {
+    return this.ableToCapture;
   }
 
   // Fonctions qui gèrent les changements de valeur

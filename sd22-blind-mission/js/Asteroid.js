@@ -42,8 +42,8 @@ function Asteroid() {
   this.speed = 0.1;
 
   if (score >= 1) this.speed = 0.1;
-  if (score >= 20) this.speed = 0.5; //test de la fonction
-  if (score >= 35) this.speed = 1; //test de la fonction
+  if (score >= 20) this.speed = 0.2; //test de la fonction
+  if (score >= 35) this.speed = 0.3; //test de la fonction
 
   this.update = function () {
     this.shake = constrain(map(this.z, 70, 100, 0, 4), 0, 4);
@@ -152,6 +152,11 @@ function Asteroid() {
 
     sonexplosionAsteroide.stop();
     sonexplosionAsteroide.play();
+
+    DELAY_BETWEEN_ASTEROIDS -= 20;
+    DELAY_BETWEEN_ASTEROIDS = max(DELAY_BETWEEN_ASTEROIDS, 120);
+    
+    //createAsteroid();
   };
 
   this.isDead = function () {

@@ -3,7 +3,7 @@
 const TIMEOUT_DURATION = 10; // 10
 const GAME_DURATION = 90;
 const ASTEROID_SCALE = 50;
-let DELAY_BETWEEN_ASTEROIDS = 400;
+let DELAY_BETWEEN_ASTEROIDS;
 
 const ENABLE_MICRO = false;
 const SLEEP_TIMER_DURATION = 100;
@@ -116,6 +116,8 @@ function initGame() {
 
   musiqueJeu.stop();
   musiqueJeu.loop();
+
+  DELAY_BETWEEN_ASTEROIDS = 400;
 }
 
 function preload() {
@@ -130,7 +132,7 @@ function preload() {
 
   laser = loadSound("assets/laser.mp3");
   sonexplosionAsteroide = loadSound("assets/sonexplosion.wav");
-  
+
   selection_du_pilote.setVolume(0.6);
   selection_du_copilote.setVolume(0.6);
 
@@ -183,7 +185,7 @@ function setup() {
   textFont(typo);
   noCursor();
 
-  vieMask = createGraphics(213,178);
+  vieMask = createGraphics(213, 178);
 
   // load sprites
   for (const [spriteName, data] of Object.entries(spritesData)) {
@@ -347,6 +349,7 @@ function draw() {
     if (keyIsDown(32)) {
       if (canFire == true) {
         player.fire();
+        laser.play();
         canFire = false;
       }
     }
@@ -391,20 +394,21 @@ function draw() {
 
     vieMask.clear();
     vieMask.fill(255);
-    vieMask.rect(0,map(collisions, 0, MAX_COLLISIONS, 0, 178),213,178);
+    vieMask.rect(0, map(collisions, 0, MAX_COLLISIONS, 0, 178), 213, 178);
 
-    ( masked = vie.get()).mask(vieMask);
+    (masked = vie.get()).mask(vieMask);
     image(masked, 1726, 859);
 
     image(chrono, 235, 185, 277, 140);
 
+    textAlign(CENTER);
     textSize(50);
-    text(seconds, 205, 200);
+    text(seconds, 230, 200);
 
     image(gifjosephine, 1712, 232);
 
-    textSize(40);
-    text(score, 1709, 652);
+    textSize(80);
+    text(score, 1720, 660);
     //text(collisions, 1700, 900);
     pop();
 
@@ -431,13 +435,17 @@ function draw() {
 function keyPressed() {
   if (STEP == SLEEP) {
     if (keyCode === 65) {
-      selection_du_pilote.play(); // ♬ ajoute un SFX lorsque le pilote est choisis
-      opacityPilot = 255;
+      if (opacityPilot != 255) {
+        selection_du_pilote.play(); // ♬ ajoute un SFX lorsque le pilote est choisis
+        opacityPilot = 255;
+      }
     }
 
     if (keyCode === 66) {
-      selection_du_copilote.play();
-      opacityCopilot = 255;
+      if (opacityCopilot != 255) {
+        selection_du_copilote.play();
+        opacityCopilot = 255;
+      } 
     }
   }
 
