@@ -6,15 +6,13 @@
 //          et il faut augmenter le max speed à 0.8
 
 let playerInertia = 0.99;
-
 let playerMaxSpeed = 0.1;
-
 let playerHeadingEasing = 0.05;
 
 function Player(zoneId, x, y, heading) {
   this.zoneId = zoneId;
   this.score = 0;
-  
+
   this.hitzoneDiam = 50;
 
   // Chaque joueur a sa propre vitesse :
@@ -23,30 +21,31 @@ function Player(zoneId, x, y, heading) {
 
   this.speed = 0;
   this.vel = createVector(0, 0);
-  
-  
+
+
   // On récupère les limites de déplacement
   // du joueur selon sa zone
-  
+
   this.zoneLeft = zones[this.zoneId].left;
   this.zoneRight = zones[this.zoneId].right;
-    
-  this.speed1 = 0; 
-  this.speed2 = playerMaxSpeed / 3 * 1; 
-  this.speed3 = playerMaxSpeed / 2 * 2; 
-  this.speed4 = playerMaxSpeed; 
 
-  
+  // On définit les 4 paliers de vitesse
+  this.speed1 = 0;
+  this.speed2 = playerMaxSpeed / 3 * 1;
+  this.speed3 = playerMaxSpeed / 2 * 2;
+  this.speed4 = playerMaxSpeed;
+
+
   // Joueur à gauche de l'écran
-  
+
   if (this.zoneId == 'A') {
     this.pos = createVector(150, height / 2);
-    this.heading = 0;
-    this.a = 0;
+    this.a = 512;
     this.img = loadImage("assets/axonautepink.png");
     this.headingMin = -PI;
     this.headingMax = PI;
-    
+    this.heading = map(this.a, 0, 1023, this.headingMin, this.headingMax);
+
     this.distSpeed1 = 8; // en dessous de 2 cm
     this.distSpeed2 = 10; // entre 2 et 4 cm
     this.distSpeed3 = 16; // entre 4 et 6 cm
@@ -54,15 +53,15 @@ function Player(zoneId, x, y, heading) {
   }
 
   // Joueur à droite de l'écran
-  
+
   else {
     this.pos = createVector(width - 150, height / 2);
-    this.heading = radians(180); // il regarde à gauche
-    this.a = radians(180);
+    this.a = 512;
     this.img = loadImage("assets/axonauteblue.png");
     this.headingMin = 0;
     this.headingMax = TWO_PI;
-    
+    this.heading = map(this.a, 0, 1023, this.headingMin, this.headingMax);
+
     this.distSpeed1 = 8; // en dessous de 2 cm
     this.distSpeed2 = 10; // entre 2 et 4 cm
     this.distSpeed3 = 16; // entre 4 et 6 cm
@@ -138,7 +137,7 @@ function Player(zoneId, x, y, heading) {
     translate(this.pos.x, this.pos.y);
     rotate(this.heading);
     image(this.img, -45, 0, 120, 50); // taille de l'image
-    
+
     if (DEBUG) {
       noFill();
       strokeWeight(0);
@@ -150,11 +149,11 @@ function Player(zoneId, x, y, heading) {
 
       ellipse(0, 0, this.hitzoneDiam, this.hitzoneDiam);
     }
-    
+
     pop();
   };
-  
-  this.hasCaptured = function() {
+
+  this.hasCaptured = function () {
     this.score++;
   }
 
@@ -164,7 +163,7 @@ function Player(zoneId, x, y, heading) {
     this.a += (a - this.a) * playerHeadingEasing;
     this.heading = map(this.a, 0, 1023, this.headingMin, this.headingMax);
   };
-  
+
   this.setHeading = function (a) {
     this.a = a;
     this.heading = map(this.a, 0, 1023, this.headingMin, this.headingMax);
@@ -172,17 +171,20 @@ function Player(zoneId, x, y, heading) {
 
   this.setSpeed = function (s) {
     if (s <= this.distSpeed1) {
-        this.speed = this.speed1;
+      this.speed = this.speed1;
     } else if (s > this.distSpeed1 && s <= this.distSpeed2) {
-        this.speed = this.speed2;
+      this.speed = this.speed2;
     } else if (s > this.distSpeed2 && s <= this.distSpeed3) {
-        this.speed = this.speed3;
-    } else if (s > this.distSpeed3) {
-        this.speed = this.speed4;
-    }
-    if (this.zoneId == 'A') {
-    //console.log('dist', s);
-    //console.log('speed', this.speed);
+      this.speed = this.speed3;
+    } else if (s > this.distSpeed3 && s <= this.distSpeed4) {
+      this.speed = this.speed4;
+    } else {
+      // supérieur à this.distSpeed4, donc pas de main détectée
+      this.speed = 0;
     }
   };
+
+  this.isHere = function (s) {
+    return s < this.distSpeed4;
+  }
 }
