@@ -51,7 +51,7 @@ function showAsteroids() {
     }
     // si l'astéroide va aller de droite à gauche
     else {
-      x = random(width + 200, height + 100);
+      x = random(width + 100, height + 500);
     }
 
     // on calcule une position y et une direction y aléatoires pour varier

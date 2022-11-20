@@ -1,3 +1,5 @@
+
+
 function showSpaceship() {
   push();
 
@@ -9,7 +11,7 @@ function showSpaceship() {
 
   spaceshipx += (spaceshipxtarget - spaceshipx) * easing;
   spaceshipy += (spaceshipytarget - spaceshipy) * easing;
-  
+
   translate(spaceshipx, spaceshipy);
   image(spaceship, width / 2, height / 2);
 

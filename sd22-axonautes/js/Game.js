@@ -48,7 +48,13 @@ let energiextarget = 0;
 let energieytarget = 0;
 let easing = 0.009;
 
+let dropZoneDiam = 100;
 
+let dropzonered;
+let dropzoneblue;
+
+let indicatorred;
+let indicatorblue;
 
 let zones;
 
@@ -63,6 +69,7 @@ function setup() {
   imageMode(CENTER);
   rectMode(CENTER);
   noStroke();
+
 
   videointro = createVideo(["assets/video_debut.mp4"]);
   //videointro.size(width, height);
@@ -87,6 +94,12 @@ function setup() {
   validationpink = loadImage("assets/validationpink.png");
   validationblue = loadImage("assets/validationblue.png");
 
+  dropzonered = loadImage("assets/dropzone-red.png");
+  dropzoneblue = loadImage("assets/dropzone-blue.png");
+
+  indicatorred = loadImage("assets/indicator-red.png");
+  indicatorblue = loadImage("assets/indicator-blue.png");
+
   backgroundAsset = loadImage(backgroundAsset);
 
   // On définit les limites des 2 zones de jeu
@@ -100,6 +113,21 @@ function setup() {
       right: width
     }
   };
+
+  dropZones = {
+    A: [
+      createVector(width/2 - 120, height/2 + 140),
+      createVector(width/2 - 240, height/2 + 0),
+      createVector(width/2 - 120, height/2 - 140),
+      createVector(width/2 - 60, height/2 - 200),
+    ],
+    B: [
+      createVector(width/2 + 120, height/2 + 140),
+      createVector(width/2 + 240, height/2 + 0),
+      createVector(width/2 + 120, height/2 - 140),
+      createVector(width/2 + 60, height/2 - 200),
+    ],
+  }
 
 
   initGame();
@@ -124,6 +152,10 @@ function setup() {
     showDebugSliders();
   }
   setStep(0); // TODO: 0
+
+  // DEV ONLY
+  setStep(2); 
+  fonduStep1Step2 = 0;
 }
 
 
@@ -184,6 +216,10 @@ function game() {
   // draws background image
   image(backgroundAsset, width / 2, height / 2, width, height);
 
+  for (let i = players.length - 1; i >= 0; i--) {
+    let player = players[i];
+    player.drawDropZone();
+  }
 
   // On affiche tous les items
 
@@ -192,7 +228,7 @@ function game() {
 
     // Si l'item a été capturé, on le supprime
     // donc on ne l'affiche pas
-    if (item.isCaptured()) {
+    if (item.shouldBeRemoved()) {
       items.splice(i, 1);
       continue; // permet de passer à l'objet suivant suivant
     }
@@ -209,6 +245,7 @@ function game() {
   for (let i = players.length - 1; i >= 0; i--) {
     let player = players[i];
     player.update();
+    player.checkDrop();
     player.draw();
   }
 
@@ -218,6 +255,11 @@ function game() {
 
   // On affiche le HUD en dernier, devant tout le reste
   hud();
+  
+  for (let i = players.length - 1; i >= 0; i--) {
+    let player = players[i];
+    player.drawIndicator();
+  }
 }
 
 function controlPlayers() {
