@@ -14,6 +14,8 @@ function Player(zoneId, x, y, heading) {
   this.score = 0;
   this.ableToCapture = true;
 
+  this.opacity = 255;
+
   this.hitzoneDiam = 50;
   this.offsetHitzoneDiam = 200;
 
@@ -75,6 +77,8 @@ function Player(zoneId, x, y, heading) {
   }
 
   this.update = function () {
+    this.opacity += 10;
+    this.opacity = min(this.opacity, 255);
     // Pour actualiser la position du joueur,
     // on va faire 3 étapes :
 
@@ -142,7 +146,16 @@ function Player(zoneId, x, y, heading) {
   this.draw = function () {
     push();
     translate(this.pos.x, this.pos.y);
-    rotate(this.heading);
+
+    let shake = map(this.opacity, 0, 255, radians(15), 0);
+
+    rotate(this.heading + random(-shake, shake));
+
+    if (this.opacity < 255) {
+      tint(255, this.opacity);
+      scale(map(this.opacity, 0, 255, .8, 1));
+    }
+
     image(this.img, -45, 0, 120, 50); // taille de l'image
 
     // a une batterie sur lui
@@ -189,19 +202,19 @@ function Player(zoneId, x, y, heading) {
     let indicatorScale = 1;
 
     if (this.zoneId == 'B' && this.pos.x > width - 80) {
-      indicatorPos = createVector(min(this.pos.x - 50, width - 40), constrain(this.pos.y, 40, height-40));
-      indicatorAngle = map(this.pos.y, 0, height, 90-20, 90+20);
-      indicatorScale = constrain(map(this.pos.x, width-80, width-50, 0, 1), 0, 1);
+      indicatorPos = createVector(min(this.pos.x - 50, width - 40), constrain(this.pos.y, 40, height - 40));
+      indicatorAngle = map(this.pos.y, 0, height, 90 - 20, 90 + 20);
+      indicatorScale = constrain(map(this.pos.x, width - 80, width - 50, 0, 1), 0, 1);
     }
 
     else if (this.zoneId == 'A' && this.pos.x < 80) {
-      indicatorPos = createVector(max(this.pos.x + 50, 40), constrain(this.pos.y, 40, height-40));
-      indicatorAngle = map(this.pos.y, 0, height, -90+20, -90-20);
+      indicatorPos = createVector(max(this.pos.x + 50, 40), constrain(this.pos.y, 40, height - 40));
+      indicatorAngle = map(this.pos.y, 0, height, -90 + 20, -90 - 20);
       indicatorScale = constrain(map(this.pos.x, 80, 50, 0, 1), 0, 1);
     }
 
     else if (this.pos.y > height - 80) {
-      indicatorPos = createVector(this.pos.x, min(this.pos.y - 50, height-40));
+      indicatorPos = createVector(this.pos.x, min(this.pos.y - 50, height - 40));
       indicatorAngle = 180;
       indicatorScale = constrain(map(this.pos.y, height - 80, height - 50, 0, 1), 0, 1);
     }
@@ -253,6 +266,19 @@ function Player(zoneId, x, y, heading) {
     }
   }
 
+  this.checkAsteroid = function () {
+
+    if (p5.Vector.dist(this.pos, asteroidPos)
+      <= (this.hitzoneDiam + asteroidsize) / 2) {
+      this.opacity = 50;
+
+      if (this.canCapture() == false) {
+        this.releaseItem();
+      }
+
+    }
+  }
+
   this.hasCaptured = function (item) {
     this.ableToCapture = false;
     this.capturedItem = item;
@@ -260,6 +286,13 @@ function Player(zoneId, x, y, heading) {
     // generate new drop zone
 
     this.dropZonePos = dropZones[this.zoneId][int(random(dropZones[this.zoneId].length))];
+  }
+
+  this.releaseItem = function () {
+    this.ableToCapture = true;
+    //this.capturedItem.alive = false; // remplacer par new x, y
+    this.capturedItem.resetPosition();
+    this.capturedItem = null;
   }
 
   this.hasDropped = function () {

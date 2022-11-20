@@ -107,6 +107,14 @@ function Item(type, zoneId, x, y) {
     }
   }
 
+  this.resetPosition = function() {
+    this.pos.x = random(zones[this.zoneId].left, zones[this.zoneId].right);
+    this.pos.y = random(0, height);
+
+    this.capturedBy = null;
+    this.capturable = true;
+  }
+
   this.capture = function (player) {
     this.capturable = false;
     this.capturedBy = player;

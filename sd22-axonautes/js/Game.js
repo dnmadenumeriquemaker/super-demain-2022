@@ -70,6 +70,7 @@ function setup() {
   rectMode(CENTER);
   noStroke();
 
+  asteroidPos = createVector(-100, 100);
 
   videointro = createVideo(["assets/video_debut.mp4"]);
   //videointro.size(width, height);
@@ -106,10 +107,10 @@ function setup() {
   zones = {
     A: {
       left: 0,
-      right: width / 2
+      right: width / 2 - 100
     },
     B: {
-      left: width / 2,
+      left: width / 2 + 100,
       right: width
     }
   };
@@ -154,8 +155,10 @@ function setup() {
   setStep(0); // TODO: 0
 
   // DEV ONLY
+  /*
   setStep(2); 
   fonduStep1Step2 = 0;
+  */
 }
 
 
@@ -244,6 +247,7 @@ function game() {
   // On affiche tous les items
   for (let i = players.length - 1; i >= 0; i--) {
     let player = players[i];
+    player.checkAsteroid();
     player.update();
     player.checkDrop();
     player.draw();
