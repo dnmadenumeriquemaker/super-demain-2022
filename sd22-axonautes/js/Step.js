@@ -57,6 +57,7 @@ function showStep() {
     }
 
     if (playerRed.score + playerBlue.score == 10) {
+      lastGameDuration = int((Date.now() - timerPlayStarted)/1000);
       setStep(3);
     }
   }
@@ -66,6 +67,17 @@ function showStep() {
   if (step == 3) {
     image(videofin, width / 2, height / 2, width, height);
     playingvidefin = true;
+  }
+
+  // score
+  if (step == 4) {
+    push();
+    background(255);
+    fill(0);
+    textAlign(CENTER);
+    textSize(140);
+    text(lastGameDuration + " secondes !", width/2, height/2);
+    pop();
   }
 
 }
@@ -94,5 +106,11 @@ function setStep(newStep) {
   if (newStep == 3) {
     videofin.play();
     videofin.volume(0);
+  }
+
+  if (newStep == 4) {
+    timerTimeout = setTimeout(function(){
+      setStep(0);
+    }, GAME_TIMEOUT * 1000);
   }
 }

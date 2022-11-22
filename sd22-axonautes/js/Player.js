@@ -201,13 +201,13 @@ function Player(zoneId, x, y, heading) {
     let indicatorAngle = 0;
     let indicatorScale = 1;
 
-    if (this.zoneId == 'B' && this.pos.x > width - 80) {
+    if (/*this.zoneId == 'B' && */this.pos.x > width - 80) {
       indicatorPos = createVector(min(this.pos.x - 50, width - 40), constrain(this.pos.y, 40, height - 40));
       indicatorAngle = map(this.pos.y, 0, height, 90 - 20, 90 + 20);
       indicatorScale = constrain(map(this.pos.x, width - 80, width - 50, 0, 1), 0, 1);
     }
 
-    else if (this.zoneId == 'A' && this.pos.x < 80) {
+    else if (/*this.zoneId == 'A' && */this.pos.x < 80) {
       indicatorPos = createVector(max(this.pos.x + 50, 40), constrain(this.pos.y, 40, height - 40));
       indicatorAngle = map(this.pos.y, 0, height, -90 + 20, -90 - 20);
       indicatorScale = constrain(map(this.pos.x, 80, 50, 0, 1), 0, 1);

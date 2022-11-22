@@ -2,6 +2,8 @@
 let DEBUG = false;
 let ENABLE_ARDUINO = true;
 
+let GAME_TIMEOUT = 10;
+
 let backgroundAsset = "assets/fondspatial.png";
 
 let step = null;
@@ -29,6 +31,7 @@ let fonduStep1Step2;
   1 = video_debut
   2 = game
   3 = video_fin
+  4 = score
 */
 
 let items = [];
@@ -62,6 +65,11 @@ let itemsPerZone = 5;
 let port;
 let connectBtn;
 
+let timerPlayStarted;
+let lastGameDuration;
+
+let timerTimeout;
+
 function setup() {
   createCanvas(1280, 720);
   ellipseMode(CENTER);
@@ -79,7 +87,7 @@ function setup() {
 
   videofin = createVideo(["assets/videofin.mp4"]);
   //videofin.size(width, height);
-  videofin.onended(function () { setStep(0) });
+  videofin.onended(function () { setStep(4) });
   videofin.hide();
 
   spaceship = loadImage("assets/vaisseau.png");
@@ -104,6 +112,7 @@ function setup() {
   backgroundAsset = loadImage(backgroundAsset);
 
   // On définit les limites des 2 zones de jeu
+  /*
   zones = {
     A: {
       left: 0,
@@ -111,6 +120,17 @@ function setup() {
     },
     B: {
       left: width / 2 + 100,
+      right: width
+    }
+  };
+  */
+  zones = {
+    A: {
+      left: 0,
+      right: width
+    },
+    B: {
+      left: 0,
       right: width
     }
   };
@@ -186,7 +206,7 @@ function draw() {
     if (value.length > 0) {
       let values = value.split('/');
 
-      console.log(values);
+      //console.log(values);
 
       pot1 = int(values[0]);
       pot2 = int(values[1]);
@@ -229,6 +249,11 @@ function initGame() {
   generateItems();
 
   setNewAsteroidPosition();
+
+  timerPlayStarted = Date.now();
+  lastGameDuration = 0;
+
+  clearTimeout(timerTimeout);
 }
 
 
