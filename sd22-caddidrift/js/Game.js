@@ -8,6 +8,7 @@ class Game {
     this.nextBackground;
     this.nextStep;
     this.timerBeforeNextAction;
+    this.frameCountOfStep;
   }
 
   init() {
@@ -19,8 +20,10 @@ class Game {
     this.timeFramecountStart = 0;
     this.nextBackground = 'magasin';
     this.nextStep = null;
+    this.hitCount = 0;
     clearTimeout(this.timerBeforeNextAction);
     this.timerBeforeNextAction = null;
+    this.frameCountOfStep = 0;
     obstacles = [];
     this.initBackground();
   }
@@ -28,14 +31,15 @@ class Game {
   tick() {
     this.timeCurrent++;
 
-    if (this.timeCurrent >= this.timeMax - 2/*plus on augm cette valeur plus la police arrive vite*/) { 
-      // TODO: barrage de police
-      this.setNextStep(PLAYING_END); 
+    if (this.timeCurrent >= this.timeMax - 5) {
+      this.setNextStep(PLAYING_END);
     }
 
+    /*
     if (this.timeCurrent >= this.timeMax) {
       this.end();
     }
+    */
   }
 
   start() {
@@ -43,76 +47,87 @@ class Game {
 
     let _this = this;
     this.timer = setInterval(function() {
-      _this.tick();
+      _this.tick();//on vérifis chaque x on rajoute et on vérifies ...
     }, 1000); //pour attendre 1sec/ on remet à 0 le chrono?
   }
 
   update() {
-    // No obstacles
-    if (this.timeCurrent <= .5) {
-      // Wait a little
-    }
-    
-    // Some obstacles
-    else if (this.timeCurrent <= 15) {
-      if ((frameCount - this.timeFramecountStart) % 80 == 0) {
-        this.createObstacle();
-      } //frameCount permet de un compteur ( à une vitesse donner) mais la quel ???
-    }
-
-    // More obstacles
-    else if (this.timeCurrent <= 30) {
-      if ((frameCount - this.timeFramecountStart) % 60 == 0) {
-        this.createObstacle();
+    if (this.is(PLAYING)) {
+      // No obstacles
+      if (this.timeCurrent <= .5) {
+        // Wait a little for the first obstacle
       }
-    }
 
-    // Two obstacles at the same time
-    else if (this.timeCurrent <= 40) {
-      if ((frameCount - this.timeFramecountStart) % 85 == 0) { //plus le % est grand plus c' simple
+      // Some obstacles
+      else if (this.timeCurrent <= 15) {
+        if ((frameCount - this.timeFramecountStart) % 80 == 0) {
+          this.createObstacle();
+        } //frameCount permet de un compteur ( à une vitesse donner) mais la quel ???
+      }
 
-        let wayLeft = 0;
-
-        if (Math.random() < 0.5) {
-          wayLeft = 1;
+      // More obstacles
+      else if (this.timeCurrent <= 30) {
+        if ((frameCount - this.timeFramecountStart) % 60 == 0) {
+          this.createObstacle();
         }
+      }
 
-        /*
-        let possibleWays = [0, 1, 2];
-        possibleWays = possibleWays.sort((a, b) => 0.5 - Math.random());
-        */
+      // Two obstacles at the same time
+      else if (this.timeCurrent <= 40) {
+        if ((frameCount - this.timeFramecountStart) % 85 == 0) { //plus le % est grand plus c' simple
 
-        this.createObstacle('barriere-gauche', wayLeft);
-        this.createObstacle('barriere-droite', wayLeft + 1);
+          let wayLeft = 0;
+
+          if (Math.random() < 0.5) {
+            wayLeft = 1; //permte un random sur la position ses barière une chance sur 2 qu'il soit sur la voit de D ou G 
+          }
+
+          /*
+          let possibleWays = [0, 1, 2];
+          possibleWays = possibleWays.sort((a, b) => 0.5 - Math.random());
+          */
+
+          this.createObstacle('barriere-gauche', wayLeft);
+          this.createObstacle('barriere-droite', wayLeft + 1);
+        }
+      }
+
+      // Last mile
+      else if (this.timeCurrent <= this.timeMax - 5) {
+        if ((frameCount - this.timeFramecountStart) % 55 == 0) {
+          this.createObstacle();
+        }
+      }
+
+      // End of game
+      else {
+        // No obstacle before game ends
       }
     }
 
-    // Last mile
-    else if (this.timeCurrent <= this.timeMax - 5) {
-      if ((frameCount - this.timeFramecountStart) % 55 == 0) {
-        this.createObstacle();
+
+    if (this.is(PLAYING_END)) {
+      // Obstacle du background (barrière de police)
+      if (this.getCurrentBackground().y >= GAME_END_HITZONE_Y) {
+        this.setStep(ENDING);
       }
-    }
-
-    // End of game
-    // TODO: barrage de police
-    else {
-
     }
   }
 
-  end() { 
+  /*
+  end() {
     clearInterval(this.timer);//retire le timer 
     this.timer = null;
     this.setStep(ENDING);
-  }
+  }q
+  */
 
   show() {
     rectMode(CORNER);
 
-    if (DEBUG) { //c'est pour si il y a un bug ???
+    if (DEBUG) {
       push();
-      translate(280, 0);
+      translate((width - ROAD_WIDTH) / 2, 0);
       if (player.way == 0) fill('red'); else fill('#C7ECF7');
       rect(WAYS_X[0], 0, WAY_WIDTH, height);
       if (player.way == 1) fill('red'); else fill('#C7ECF7');
@@ -141,6 +156,11 @@ class Game {
 
   setStep(step) {
     let _this = this;
+
+    if (step != this.step) {
+      this.frameCountOfStep = 0;
+    }
+
     this.step = step;
     this.nextStep = null;
 
@@ -175,7 +195,7 @@ class Game {
     }
 
     if (step == ONBOARDING_5) {
-      clearTimeout(this.timerBeforeNextAction);
+      clearTimeout(this.timerBeforeNextAction);//il arrête se qu'il y a dans ses parantaise
       this.timerBeforeNextAction = setTimeout(function() {
         _this.setNextStep(PLAYING);
         clearTimeout(this.timerBeforeNextAction);
@@ -184,19 +204,25 @@ class Game {
 
     if (step == PLAYING) {
       // triggered once
-      game.nextBackground = 'route';
-      game.start();
+      this.nextBackground = 'route';
+      this.start();
+      clearTimeout(this.timerBeforeNextAction);
     }
 
     if (step == ENDING) {
       // triggered once
+      clearInterval(this.timer);
+      clearTimeout(this.timerBeforeNextAction);
+      backgrounds = [];
 
-      // TODO: time out 
       // TODO: impression ticket
     }
   }
 
   setNextStep(nextStep) {
+    if (DEBUG) {
+      console.log('setNextStep', nextStep);
+    }
     this.nextStep = nextStep;
     this.nextBackground = stepsBackground[nextStep];
   }
@@ -206,7 +232,7 @@ class Game {
   }
 
   amende() {
-    return 10000 - (player.hitCount * 150);
+    return 10000 - constrain(player.hitCount * 150, 0, 10000);
   }
 
   createObstacle(type = null, way = null) {

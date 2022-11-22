@@ -13,7 +13,7 @@ class Player {
   }
 
   update() {
-    this.x += (WAYS_X[this.way] - this.x) * 0.3;
+    this.x += (WAYS_X[this.way] - this.x) * 0.3; // easing
   }
 
   show() {
