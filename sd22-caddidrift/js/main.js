@@ -1,9 +1,16 @@
 let banière;
+let font;
+let giFNeutre;
+
 function preload() {
   // load images data
   imagesList.forEach(function(imageName) {
     images[imageName] = loadImage('assets/' + imageName + '.png');//raccourcie pour appeler toute les image qui sont dans le groupe assets ??!
   });
+  gifNeutre = loadImage("gif/position-neutre.gif");
+  gifDroite = loadImage("gif/Droite.gif");
+  gifGauche = loadImage("gif/Gauche.gif");
+
 
   // load spritesheets
   for (const [spriteName, data] of Object.entries(spritesData)) {
@@ -12,7 +19,11 @@ function preload() {
 
   images['caddie'] = loadImage('assets/caddie.png');
   images['mini-caddie'] = loadImage('assets/mini-caddie.png');
+
   banière = loadImage("assets/Caddidrift_logo.png");
+
+  font = loadFont('font/nominee.otf');
+
 }
 
 
@@ -20,9 +31,11 @@ function preload() {
 
 
 function setup() {
+  //createCanvas(720,1280);
   createCanvas(1280, 720);
   noStroke();
   textAlign(CENTER);
+  textFont(font);
 
   // load sprites
   for (const [spriteName, data] of Object.entries(spritesData)) {
@@ -43,7 +56,7 @@ function setup() {
   game.init();
 
   // debug
-  game.forceStep(PLAYING);
+  game.forceStep(WAITING);
 }
 
 
@@ -52,6 +65,8 @@ function setup() {
 
 function draw() {
   background(0);
+
+  game.frameCountOfStep++;
 
   game.updateBackground();
   game.showBackground();
@@ -65,45 +80,51 @@ function draw() {
 
 
     push();
-    translate(280, 0);
+    translate((width - ROAD_WIDTH) / 2, 0);
 
     player.update();
     player.show();
 
     pop();
-
+    push();
+    fill('#3d008f')
     if (game.is(WAITING)) {
-      fill(255);
+
+      image(gifGauche, 250, 100, 1200 / 2, 675 / 2);
+      //fill(255);
+      textSize(32);
       text('On attend un joueur !', width / 2, height / 2);
-      text('Penchez le caddie à gauche pour commencer', width / 2, height / 2 + 100);
+      textSize(24);
+      text('Asseyez-vous et penchez le caddie à gauche pour commencer', width / 2, height / 2 + 70);
+
     }
 
     if (game.is(ONBOARDING_1)) {
-      fill(255);
+      //fill(255);
       text('Maintenant, penchez le caddie à droite', width / 2, height / 2);
     }
 
     if (game.is(ONBOARDING_2)) {
-      fill(255);
+      //fill(255);
       text('Maintenant, redressez le caddie', width / 2, height / 2);
     }
 
     if (game.is(ONBOARDING_4)) {
-      fill(255);
+      //fill(255);
       text('Fuyez avec le caddie plein en évitant tous les obstacles !', width / 2, height / 2);
-      image(barière, 0, 0);
+      //image(barriere, 0, 0); // Kévin pour Corentin : ?
       //mettre le logo
     }
   }
-
-  if (game.is(PLAYING) 
-   || game.is(PLAYING_END)) {
+  pop();
+  if (game.is(PLAYING)
+    || game.is(PLAYING_END)) {
 
     game.update();
     game.show();
 
     push();
-    translate(280, 0);
+    translate((width - ROAD_WIDTH) / 2, 0); //changer l'origine
 
     for (let i = obstacles.length - 1; i >= 0; i--) {
       let obstacle = obstacles[i];
@@ -121,21 +142,44 @@ function draw() {
 
     pop();
 
+
+
+    push();
+    textSize(18);
+    textAlign(LEFT);
+    fill('#3d008f');
+    text("votre amende est de :" + game.amende(), 30, 100);
+    pop();
+
     game.showHUD();
 
   }
 
   if (game.is(ENDING)) {
-   //if(frameCount >= 500){
+
+    push();
     fill('#000000');
-    rect(0,0,width, height);
-    fill('#ffffff');
-    textAlign(CENTER);
-    text('Votre amende est de ' + game.amende() + ' €', width / 2, height / 2);
-    if (frameCount >= 500){
-      game.is(WAITING);
+    rect(0, 0, width, height);
+
+    if (game.frameCountOfStep > 60) {
+      fill('#fe95df');
+      textAlign(CENTER);
+      textSize(120);
+      text('Under arrest', width / 2 + 150, 500);
     }
-    
+
+    if (game.frameCountOfStep > 120) {
+      image(banière, 350, 10);
+      fill('#fe95df');
+      textAlign(CENTER);
+      textSize(40);
+      text('Votre amende est de ' + game.amende() + ' €', width / 2 + 170, 600);
+    }
+
+    if (game.frameCountOfStep > 1500) { //après un certain temps
+      game.setStep(WAITING); //c'est pour relancer le jeu à la fin 
+    }
+    pop();
   }
 }
 
@@ -189,7 +233,6 @@ function keyPressed() {
     game.forceStep(PLAYING);
   }
 
-  
   if (key == 'e') {
     game.forceStep(PLAYING_END);
   }
@@ -200,6 +243,7 @@ function keyReleased() {
 
   if (game.is(ONBOARDING_2)) {
     // will wait for background
+    // TODO: disable helper text from here
     game.setNextStep(ONBOARDING_3);
   }
 }

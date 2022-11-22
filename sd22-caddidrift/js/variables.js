@@ -1,20 +1,22 @@
 let DEBUG = false;
 
-const ROAD_WIDTH = 720; //largeur de la zonne de jeu
+const ROAD_WIDTH = 800; //largeur de la zonne de jeu
 const WAY_WIDTH = 200;//largeur des rect de voix
+const WAYS_X = [0, 300, 600];
+
 const PLAYER_BACK_TOLERANCE = 70;
 const GAME_DURATION = 60;
-const GAME_SPEED = 10; // 12 //rapiditerdu  jeus
-const WAYS_X = [0, 260, 520];
+const GAME_SPEED = 10; // 10 //rapiditerdu  jeus
+const GAME_END_HITZONE_Y = -100;
 
 const WAITING = 0; // ask to bend left
-const ONBOARDING_1 = 1; // is bending left, ask to bend right
+const ONBOARDING_1 = 1; // is bqending left, ask to bend right
 const ONBOARDING_2 = 2; // is bending right, ask to stay in the middle
 const ONBOARDING_3 = 3; // is in the middle: checkout //quand on peut pas tourner
 const ONBOARDING_4 = 4; // after checkout: roof view + countdown
 const ONBOARDING_5 = 5; // countdown over: outside of the store
 const PLAYING = 6; // is playing: starts timer //pas compris se que c'était
-const PLAYING_END = 7; // police bareer
+const PLAYING_END = 7; // police barrier
 const ENDING = 8;
 
 let player;
@@ -66,7 +68,9 @@ let obstaclesList = [ //tout les obstacles  à une case
   'huile',
 ];
 
-let spritesData = { //définie la vitesse du spreat ???
+
+
+let spritesData = { //définie la vitesse du spreat
   'banane': {
     size: [260, 260],
     frames: 3,
@@ -95,7 +99,7 @@ let spritesData = { //définie la vitesse du spreat ???
   'caddie': {
     size: [260, 260],
     frames: 4,
-    speed: 0.4,//pour ralentir le caddi
+    speed: 0.2,//pour ralentir le caddi
   },
   'minus-one': {
     size: [200, 200],
