@@ -1,5 +1,4 @@
-// Mode à désactiver
-// lorsque le dispositif est en production
+// Mode : production
 let DEBUG = false;
 let ENABLE_ARDUINO = true;
 
@@ -69,6 +68,7 @@ function setup() {
   imageMode(CENTER);
   rectMode(CENTER);
   noStroke();
+  noCursor();
 
   asteroidPos = createVector(-100, 100);
 
@@ -319,6 +319,7 @@ function generateItems() {
 
 function hud() {
   // On affiche le score
+  /*
   let score = playerRed.score + playerBlue.score;
   let total = itemsPerZone * 2;
 
@@ -328,6 +329,7 @@ function hud() {
   textAlign(CENTER);
   text(score + ' / ' + total, width / 2, 50);
   pop();
+  */
 }
 
 
