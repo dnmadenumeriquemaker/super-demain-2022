@@ -12,11 +12,11 @@ function showStep() {
     playerRedActive = false;
     playerBlueActive = false;
 
-    if (playerRed.isHere(dist1)) {
+    if (playerRed.isHere(dist2)) {
       playerRedActive = true;
     }
 
-    if (playerBlue.isHere(dist2)) {
+    if (playerBlue.isHere(dist1)) {
       playerBlueActive = true;
     }
 
@@ -74,7 +74,7 @@ function setStep(newStep) {
   if (step != newStep) {
     frameCountSinceStep = 0;
   }
-  
+
   step = newStep;
 
   if (newStep == 0) {
@@ -96,4 +96,3 @@ function setStep(newStep) {
     videofin.volume(0);
   }
 }
-

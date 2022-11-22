@@ -53,10 +53,10 @@ function Player(zoneId, x, y, heading) {
     this.heading = map(this.a, 0, 1023, this.headingMin, this.headingMax);
     this.c = color('#F21C74');
 
-    this.distSpeed1 = 8; // en dessous de 2 cm
-    this.distSpeed2 = 10; // entre 2 et 4 cm
+    this.distSpeed1 = 6; // en dessous de 2 cm
+    this.distSpeed2 = 12; // entre 2 et 4 cm
     this.distSpeed3 = 16; // entre 4 et 6 cm
-    this.distSpeed4 = 24; // entre 6 et 8 cm
+    this.distSpeed4 = 22; // entre 6 et 8 cm
   }
 
   // Joueur à droite de l'écran
@@ -70,10 +70,10 @@ function Player(zoneId, x, y, heading) {
     this.heading = map(this.a, 0, 1023, this.headingMin, this.headingMax);
     this.c = color('#47BEBB');
 
-    this.distSpeed1 = 8; // en dessous de 2 cm
-    this.distSpeed2 = 10; // entre 2 et 4 cm
+    this.distSpeed1 = 6; // en dessous de 2 cm
+    this.distSpeed2 = 12; // entre 2 et 4 cm
     this.distSpeed3 = 16; // entre 4 et 6 cm
-    this.distSpeed4 = 24; // entre 6 et 8 cm
+    this.distSpeed4 = 22; // entre 6 et 8 cm
   }
 
   this.update = function () {

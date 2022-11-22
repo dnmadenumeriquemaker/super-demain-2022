@@ -4,7 +4,6 @@ let directionasteroidx = 4;
 let directionasteroidy = 2;
 
 let asteroidrotation = 10;
-
 let asteroidsize = 100;
 
 function showAsteroids() {
@@ -35,28 +34,32 @@ function showAsteroids() {
     || (directionasteroidy < 0 && asteroidPos.y < -asteroidsize)
   ) {
 
+    setNewAsteroidPosition();
 
-    // on calcule une nouvelle direction/vitesse
-    directionasteroidx = random(2, 4);
-
-    // une fois sur 2, on change le sens de l'astéroide
-    if (random(1) > 0.5) {
-      directionasteroidx = -directionasteroidx;
-    }
-
-    // si l'astéroide va aller de gauche à droite
-    if (directionasteroidx > 0) {
-      asteroidPos.x = random(-500, -100);
-    }
-    // si l'astéroide va aller de droite à gauche
-    else {
-      asteroidPos.x = random(width + 100, height + 500);
-    }
-
-    // on calcule une position y et une direction y aléatoires pour varier
-    asteroidPos.y = random(-asteroidsize, height + asteroidsize);
-    directionasteroidy = random(-2, 2);
   }
+}
+
+function setNewAsteroidPosition() {
+  // on calcule une nouvelle direction/vitesse
+  directionasteroidx = random(2, 4);
+
+  // une fois sur 2, on change le sens de l'astéroide
+  if (random(1) > 0.5) {
+    directionasteroidx = -directionasteroidx;
+  }
+
+  // si l'astéroide va aller de gauche à droite
+  if (directionasteroidx > 0) {
+    asteroidPos.x = random(-500, -100);
+  }
+  // si l'astéroide va aller de droite à gauche
+  else {
+    asteroidPos.x = random(width + 100, height + 500);
+  }
+
+  // on calcule une position y et une direction y aléatoires pour varier
+  asteroidPos.y = random(-asteroidsize, height + asteroidsize);
+  directionasteroidy = random(-2, 2);
 }
 
 /* let freeze = 0
@@ -66,7 +69,7 @@ this.checkCollision = function() {
     if(this.zoneId=='B'){
       player = playerBluetouche;
     }
-      if (p5.Vector.dist(player.pos, this.pos) 
+      if (p5.Vector.dist(player.pos, this.pos)
           <= (player.hitzoneDiam + this.hitzoneDiam) / 2) {
           timerFreeze++;
            if (timerFreeze > 120) {
@@ -77,7 +80,7 @@ this.checkCollision = function() {
     }
        }
   };
-  
+
  if (playerRedtouche == true
       or playerBluetouche == true){
     freeze++;

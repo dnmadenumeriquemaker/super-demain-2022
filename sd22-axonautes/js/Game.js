@@ -1,11 +1,11 @@
 // Mode à désactiver
 // lorsque le dispositif est en production
-let DEBUG = true;
-let ENABLE_ARDUINO = false;
+let DEBUG = false;
+let ENABLE_ARDUINO = true;
 
 let backgroundAsset = "assets/fondspatial.png";
 
-let step = 0;
+let step = null;
 let playerRedActive = false;
 let playerBlueActive = false;
 let waitTimer = 0;
@@ -152,17 +152,32 @@ function setup() {
   if (DEBUG) {
     showDebugSliders();
   }
-  setStep(0); // TODO: 0
+  //setStep(0); // TODO: 0
 
   // DEV ONLY
   /*
-  setStep(2); 
+  setStep(2);
   fonduStep1Step2 = 0;
   */
 }
 
 
 function draw() {
+  if (step == null) {
+    push();
+    background(0);
+    textAlign(CENTER);
+    textSize(40);
+    fill(255);
+    text("Cliquez n'importe où ou presser\r\nune touche de clavier pour démarrer le dispositif", width/2, height/2);
+    pop();
+    if (mouseIsPressed || keyIsPressed) {
+      setStep(0);
+    }
+
+    return;
+  }
+
   frameCountSinceStep++;
 
   if (ENABLE_ARDUINO) {
@@ -170,6 +185,8 @@ function draw() {
 
     if (value.length > 0) {
       let values = value.split('/');
+
+      console.log(values);
 
       pot1 = int(values[0]);
       pot2 = int(values[1]);
@@ -210,6 +227,8 @@ function initGame() {
 
   items = [];
   generateItems();
+
+  setNewAsteroidPosition();
 }
 
 
@@ -259,7 +278,7 @@ function game() {
 
   // On affiche le HUD en dernier, devant tout le reste
   hud();
-  
+
   for (let i = players.length - 1; i >= 0; i--) {
     let player = players[i];
     player.drawIndicator();
@@ -270,8 +289,8 @@ function controlPlayers() {
   playerRed.easeHeading(pot1);
   playerBlue.easeHeading(pot2);
 
-  playerRed.setSpeed(dist1);
-  playerBlue.setSpeed(dist2);
+  playerRed.setSpeed(dist2);
+  playerBlue.setSpeed(dist1);
 }
 
 function controlPlayersWithSliders() {
