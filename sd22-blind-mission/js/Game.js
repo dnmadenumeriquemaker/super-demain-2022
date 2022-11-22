@@ -1,6 +1,6 @@
 
 
-const TIMEOUT_DURATION = 10; // 10
+const TIMEOUT_DURATION = 10; // TODO: more time after videos
 const GAME_DURATION = 90;
 const ASTEROID_SCALE = 50;
 let DELAY_BETWEEN_ASTEROIDS;
@@ -236,7 +236,7 @@ function draw() {
     background(0);
     textSize(40);
     textAlign(CENTER);
-    text("Cliquez n'importe où\r\nou appuyez sur n'importe quelle touche de clavier\r\npour démarrer le jeu", width / 2, height / 2);
+    text("Cliquez n'importe où\r\nou appuyez sur n'importe quelle touche de clavier\r\npour démarrer le dispositif", width / 2, height / 2);
     pop();
   }
 
@@ -421,14 +421,15 @@ function draw() {
   }
 
   if (STEP == WIN) {
-
+    /*
     image(win, width / 2, height / 2);
     textAlign(CENTER);
     textSize(40);
     text("Appuyez sur start pour recommencer", 960, 740);
+    */
   }
   if (STEP == LOST) {
-    image(lost, width / 2, height / 2);
+    //image(lost, width / 2, height / 2);
   }
 }
 
@@ -445,7 +446,7 @@ function keyPressed() {
       if (opacityCopilot != 255) {
         selection_du_copilote.play();
         opacityCopilot = 255;
-      } 
+      }
     }
   }
 
@@ -457,6 +458,12 @@ function keyPressed() {
   }
   if (key == "p") {
     setStep(PLAY);
+  }
+  if (key == "i") {
+    setStep(WIN);
+  }
+  if (key == "l") {
+    setStep(LOST);
   }
 
   checkEvents();
@@ -508,9 +515,36 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+var winVideo;
+
+document.addEventListener("DOMContentLoaded", function () {
+  winVideo = document.getElementById("winvideo");
+  winVideo.addEventListener("ended", function (oEvent) {
+    setTimerBeforeRestart();
+  });
+});
+
+var lostVideo;
+
+document.addEventListener("DOMContentLoaded", function () {
+  lostVideo = document.getElementById("lostvideo");
+  lostVideo.addEventListener("ended", function (oEvent) {
+    setTimerBeforeRestart();
+  });
+});
 
 
 
+function setTimerBeforeRestart() {
+
+  setStep(SLEEP);
+  /*
+  clearTimeout(timerBeforeRestart);
+  timerBeforeRestart = setTimeout(function () {
+    setStep(SLEEP);
+  }, TIMEOUT_DURATION * 1000); 
+  */
+}
 
 
 
@@ -560,17 +594,38 @@ function setStep(newStep) {
         setStep(WIN);
       }
     }, 1000);
+  } else {
+    clearInterval(timer);
+  }
+
+
+  if (STEP == WIN) {
+    // win: video
+    winVideo.style.display = "block";
+    winVideo.currentTime = 0.0001;
+    winVideo.play();
+  } else {
+    winVideo.pause();
+    winVideo.style.display = "none";
+  }
+
+  if (STEP == LOST) {
+    // lost: video
+    lostVideo.style.display = "block";
+    lostVideo.currentTime = 0.0001;
+    lostVideo.play();
+  } else {
+    lostVideo.pause();
+    lostVideo.style.display = "none";
   }
 
   if (STEP == WIN || STEP == LOST) {
-    timerBeforeRestart = setTimeout(function () {
-      setStep(SLEEP);
-    }, TIMEOUT_DURATION * 1000);
+    
   } else {
     clearTimeout(timerBeforeRestart);
   }
 
-  if (STEP != PLAY && STEP != WIN && STEP != LOST) {
+  if (STEP != PLAY) {
     musiqueJeu.stop();
   }
 }
