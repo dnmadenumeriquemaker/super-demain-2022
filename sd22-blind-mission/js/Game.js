@@ -114,27 +114,29 @@ function initGame() {
 
   globalShake = 0;
 
-  musiqueJeu.stop();
-  musiqueJeu.loop();
+  musiqueJeu.pause();
+  musiqueJeu.currentTime = 0.0001;
+  musiqueJeu.play();
 
   DELAY_BETWEEN_ASTEROIDS = 400;
 }
 
 function preload() {
+
   typo = loadFont('assets/UpheavalPro.otf');
-  sonImpactVaisseau = loadSound("assets/sonexplosion.wav"); // son explosion de l'asteroide
+
+  sonImpactVaisseau = document.getElementById("sonImpactVaisseau"); // son explosion de l'asteroide
   // ♬ Chargement deS SONS
-  musiqueIntro = loadSound("music/acceuil.mp3");
-  musiqueJeu = loadSound("assets/Gamesound.mp3");
-  musiqueJeu.setVolume(1);
-  selection_du_pilote = loadSound("music/selectionpilote.wav"); // ♬ SFX choix pilote
-  selection_du_copilote = loadSound("music/selectioncopilote.wav"); // ♬ SFX choix copilote
+  musiqueIntro = document.getElementById("musiqueIntro");
+  musiqueJeu = document.getElementById("musiqueJeu");
+  laser = document.getElementById("laser");
+  sonexplosionAsteroide = document.getElementById("sonexplosionAsteroide");
 
-  laser = loadSound("assets/laser.mp3");
-  sonexplosionAsteroide = loadSound("assets/sonexplosion.wav");
+  selection_du_pilote = document.getElementById("selection_du_pilote"); // ♬ SFX choix pilote
+  selection_du_copilote = document.getElementById("selection_du_copilote"); // ♬ SFX choix copilote
 
-  selection_du_pilote.setVolume(0.6);
-  selection_du_copilote.setVolume(0.6);
+
+
 
   // Media
   imgFocus = loadImage("assets/focus.gif");
@@ -168,8 +170,8 @@ function preload() {
   // Chargement illustration : Illus du pilote et du co-pilote
   pilote = loadImage("img/pilote.png");
   copilote = loadImage("img/copilote.png");
-  piloteop = loadImage("img/pilote-opacity.png") ;
-  copiloteop = loadImage("img/copilote-opacity.png") ;
+  piloteop = loadImage("img/pilote-opacity.png");
+  copiloteop = loadImage("img/copilote-opacity.png");
 
   // load spritesheets
   for (const [spriteName, data] of Object.entries(spritesData)) {
@@ -202,9 +204,6 @@ function setup() {
 
     animations[spriteName] = animation;
   }
-
-  musiqueJeu.playMode('restart');
-  musiqueIntro.playMode('restart');
 
   if (ENABLE_MICRO === true) {
     navigator.getUserMedia(
@@ -326,8 +325,8 @@ function draw() {
       rect(0, 0, width, height);
       pop();
 
-      if (musiqueIntro.isPlaying()){
-        musiqueIntro.setVolume(map(sleepTimer, SLEEP_TIMER_DURATION, 0, SLEEP_VOLUME, 0));
+      if (!musiqueIntro.paused || musiqueIntro.currentTime) {
+        musiqueIntro.volume = constrain(map(sleepTimer, SLEEP_TIMER_DURATION, 0, SLEEP_VOLUME, 0), 0, 1);
       }
       if (sleepTimer <= 0) {
         setStep(START);
@@ -421,8 +420,11 @@ function draw() {
 function keyPressed() {
   if (STEP == SLEEP) {
     if (keyCode === 65) {
-       image(pilote, 1250, 0, 560, 901);
+      image(pilote, 1250, 0, 560, 901);
       if (opacityPilot != 255) {
+        selection_du_pilote.volume = 0.6;
+        selection_du_pilote.pause();
+        selection_du_pilote.currentTime = 0.00001;
         selection_du_pilote.play(); // ♬ ajoute un SFX lorsque le pilote est choisis
         opacityPilot = 255;
       }
@@ -431,6 +433,9 @@ function keyPressed() {
     if (keyCode === 66) {
       image(copilote, 50, 0, 700, 901);
       if (opacityCopilot != 255) {
+        selection_du_copilote.volume = 0.6;
+        selection_du_copilote.pause();
+        selection_du_copilote.currentTime = 0.00001;
         selection_du_copilote.play();
         opacityCopilot = 255;
       }
@@ -454,7 +459,11 @@ function keyPressed() {
     if (keyIsDown(82)) {
       if (canFire == true) {
         player.fire();
+
+        laser.pause();
+        laser.currentTime = 0.00001;
         laser.play();
+
         canFire = false;
       }
     }
@@ -499,6 +508,9 @@ function mousePressed() {
 
   if (STEP == PLAY) {
     player.fire();
+
+    laser.pause();
+    laser.currentTime = 0.00001;
     laser.play();
   }
 }
@@ -567,13 +579,19 @@ function setStep(newStep) {
   if (!EVENTS_READY) return;
 
   // disable potentially playing sounds by default
-  musiqueIntro.pause();
+  if (musiqueIntro) {
+    musiqueIntro.pause();
+  }
 
   // waiting screen
   if (STEP == SLEEP) {
-    musiqueIntro.stop();
-    musiqueIntro.loop(); // ♬ loop de la musique
-    musiqueIntro.setVolume(SLEEP_VOLUME);
+    if (musiqueIntro) {
+      musiqueIntro.pause();
+    }
+      musiqueIntro.currentTime = 0.0001; // ♬ loop de la musique
+      musiqueIntro.volume = SLEEP_VOLUME;
+      musiqueIntro.play(); // ♬ loop de la musique
+    
 
     sleepTimer = SLEEP_TIMER_DURATION;
     opacityCopilot = SLEEP_PLAYERS_OPACITY;
@@ -630,12 +648,14 @@ function setStep(newStep) {
   }
 
   if (STEP == WIN || STEP == LOST) {
-    
+
   } else {
     clearTimeout(timerBeforeRestart);
   }
 
   if (STEP != PLAY) {
-    musiqueJeu.stop();
+    if (musiqueJeu) {
+      musiqueJeu.pause();
+    }
   }
 }

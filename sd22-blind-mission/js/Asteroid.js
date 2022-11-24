@@ -150,7 +150,8 @@ function Asteroid() {
 
     this.firePosition = [player.x, player.y];
 
-    sonexplosionAsteroide.stop();
+    sonexplosionAsteroide.pause();
+    sonexplosionAsteroide.currentTime = 0.00001;
     sonexplosionAsteroide.play();
 
     DELAY_BETWEEN_ASTEROIDS -= 20;

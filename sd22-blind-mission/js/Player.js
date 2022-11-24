@@ -57,7 +57,8 @@ function Player() {
   }
 
   this.collideWithAsteroid = function () {
-    sonImpactVaisseau.stop();
+    sonImpactVaisseau.pause();
+    laser.sonImpactVaisseau = 0.00001;
     sonImpactVaisseau.play();
     
     collisions = collisions + 1;
