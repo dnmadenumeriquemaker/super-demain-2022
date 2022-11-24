@@ -136,9 +136,10 @@ function preload() {
   laser = loadSound("assets/laser.mp3");
   sonexplosionAsteroide = loadSound("assets/sonexplosion.wav");
   */
-
+/*
   selection_du_pilote.setVolume(0.6);
   selection_du_copilote.setVolume(0.6);
+  */
 
   // Media
   imgFocus = loadImage("assets/focus.gif");
@@ -330,9 +331,11 @@ function draw() {
       rect(0, 0, width, height);
       pop();
 
+      /*
       if (musiqueIntro.isPlaying()){
         musiqueIntro.setVolume(map(sleepTimer, SLEEP_TIMER_DURATION, 0, SLEEP_VOLUME, 0));
       }
+      */
       if (sleepTimer <= 0) {
         setStep(START);
       }
