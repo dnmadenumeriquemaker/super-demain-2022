@@ -97,10 +97,12 @@ function preload() {
   validationpink = loadImage("assets/validationpink.png");
   validationblue = loadImage("assets/validationblue.png");
 
+  /*
   batterierecue = loadSound('assets/le_vaisseau_a_recu_une_batterie.mp3');
   pileattrapee = loadSound('assets/axonaute_a_pris_une_batterie.mp3');
   asteroidtouche = loadSound('assets/Axonaute_touche.mp3');
   axogame = loadSound('assets/axo_game.mp3');
+  */
 
 
   dropzonered = loadImage("assets/dropzone-red.png");
@@ -308,7 +310,7 @@ function initGame() {
 
   timerGiveUp = 0;
 
-  axogame.loop();
+  //axogame.loop();
 }
 
 

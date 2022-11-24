@@ -279,7 +279,7 @@ function Player(zoneId, x, y, heading) {
       this.opacity = 50;
       
       if (this.hittingAsteroid == false) {
-        asteroidtouche.play();
+        //asteroidtouche.play();
       }
       
       this.hittingAsteroid = true;
@@ -312,7 +312,7 @@ function Player(zoneId, x, y, heading) {
   this.hasDropped = function () {
     this.score++;
     this.ableToCapture = true;
-    batterierecue.play();
+    //batterierecue.play();
   }
 
   this.canCapture = function () {

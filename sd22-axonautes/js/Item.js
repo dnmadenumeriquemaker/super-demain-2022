@@ -103,7 +103,7 @@ function Item(type, zoneId, x, y) {
       if (p5.Vector.dist(player.pos, this.pos)
         <= (player.hitzoneDiam + this.hitzoneDiam) / 2) {
         this.capture(player);
-        pileattrapee.play();
+        //pileattrapee.play();
       }
     }
   }

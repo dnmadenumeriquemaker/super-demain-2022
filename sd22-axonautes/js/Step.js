@@ -11,7 +11,7 @@ function showStep() {
 
     if (playerRed.isHere(dist2)) {
       if (playerRedActive == false) {
-        pileattrapee.play();
+        //pileattrapee.play();
       }
       playerRedActive = true;
     } else {
@@ -20,7 +20,7 @@ function showStep() {
 
     if (playerBlue.isHere(dist1)) {
       if (playerBlueActive == false) {
-        pileattrapee.play();
+        //pileattrapee.play();
       }
       playerBlueActive = true;
     } else {
@@ -109,8 +109,8 @@ function setStep(newStep) {
   }
 
   if (newStep == 1) {
-    videointro.play();
-    videointro.volume(0);
+    //videointro.play();
+    //videointro.volume(0);
   }
 
   if (newStep == 2) {
@@ -120,8 +120,8 @@ function setStep(newStep) {
   }
 
   if (newStep == 3) {
-    videofin.play();
-    videofin.volume(0);
+    //videofin.play();
+    //videofin.volume(0);
   }
 
   if (newStep == 4) {
