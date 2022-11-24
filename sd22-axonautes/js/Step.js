@@ -6,26 +6,33 @@ function showStep() {
   if (step == 0) {
     image(ecranveille, width / 2, height / 2);
     image(inserezvosmains, width / 2, 500);
-    image(waitvalidationpink, 600, 400);
-    image(waitvalidationblue, 740, 400);
-
-    playerRedActive = false;
-    playerBlueActive = false;
+    image(waitvalidationpink, 570, 400);
+    image(waitvalidationblue, 720, 400);
 
     if (playerRed.isHere(dist2)) {
+      if (playerRedActive == false) {
+        pileattrapee.play();
+      }
       playerRedActive = true;
+    } else {
+      playerRedActive = false;
     }
 
     if (playerBlue.isHere(dist1)) {
+      if (playerBlueActive == false) {
+        pileattrapee.play();
+      }
       playerBlueActive = true;
+    } else {
+      playerBlueActive = false;
     }
 
     if (playerRedActive == true) {
-      image(validationpink, 600, 400);
+      image(validationpink, 570, 400);
     }
 
     if (playerBlueActive == true) {
-      image(validationblue, 740, 400);
+      image(validationblue, 720, 400);
     }
 
     if (playerRedActive == true && playerBlueActive == true) {
@@ -57,10 +64,12 @@ function showStep() {
     }
 
     if (playerRed.score + playerBlue.score == 10) {
-      lastGameDuration = int((Date.now() - timerPlayStarted)/1000);
+      lastGameDuration = int((Date.now() - timerPlayStarted) / 1000);
       setStep(3);
     }
+
   }
+
 
 
 
@@ -73,13 +82,18 @@ function showStep() {
   if (step == 4) {
     push();
     background(255);
+    
     fill(0);
     textAlign(CENTER);
-    textSize(140);
-    text(lastGameDuration + " secondes !", width/2, height/2);
+    textSize(100);
+    textFont(futura);
+    text("BRAVO!", width / 2, height / 2 - 100);
+
+    textFont(montserrat);
+    textSize(40);
+    text("Vous avez réussi en " + lastGameDuration + " secondes!", width / 2, height / 2);
     pop();
   }
-
 }
 
 function setStep(newStep) {
@@ -101,6 +115,8 @@ function setStep(newStep) {
 
   if (newStep == 2) {
     initGame();
+  } else {
+    axogame.stop();
   }
 
   if (newStep == 3) {
@@ -109,7 +125,7 @@ function setStep(newStep) {
   }
 
   if (newStep == 4) {
-    timerTimeout = setTimeout(function(){
+    timerTimeout = setTimeout(function() {
       setStep(0);
     }, GAME_TIMEOUT * 1000);
   }

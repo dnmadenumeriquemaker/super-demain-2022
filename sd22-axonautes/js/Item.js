@@ -34,7 +34,7 @@ function Item(type, zoneId, x, y) {
   this.zoneLeft = zones[this.zoneId].left;
   this.zoneRight = zones[this.zoneId].right;
 
-  this.update = function () {
+  this.update = function() {
     if (this.capturable == true) {
       this.heading += this.headingDirection;
 
@@ -69,7 +69,7 @@ function Item(type, zoneId, x, y) {
   // On affiche notre item
   // grâce à toutes ses coordonnées
 
-  this.draw = function () {
+  this.draw = function() {
     if (this.isCaptured() == false) {
       push();
       translate(this.pos.x, this.pos.y);
@@ -93,7 +93,7 @@ function Item(type, zoneId, x, y) {
     }
   };
 
-  this.checkCollision = function () {
+  this.checkCollision = function() {
     let player = playerRed;
     if (this.zoneId == 'B') {
       player = playerBlue;
@@ -103,6 +103,7 @@ function Item(type, zoneId, x, y) {
       if (p5.Vector.dist(player.pos, this.pos)
         <= (player.hitzoneDiam + this.hitzoneDiam) / 2) {
         this.capture(player);
+        pileattrapee.play();
       }
     }
   }
@@ -115,22 +116,22 @@ function Item(type, zoneId, x, y) {
     this.capturable = true;
   }
 
-  this.capture = function (player) {
+  this.capture = function(player) {
     this.capturable = false;
     this.capturedBy = player;
 
     player.hasCaptured(this);
   }
 
-  this.drop = function () {
+  this.drop = function() {
     this.alive = false;
   }
 
 
-  this.isCaptured = function () {
+  this.isCaptured = function() {
     return !this.capturable;
   };
-  this.shouldBeRemoved = function () {
+  this.shouldBeRemoved = function() {
     return !this.alive;
   };
 }

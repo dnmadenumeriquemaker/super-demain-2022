@@ -4,6 +4,8 @@ let ENABLE_ARDUINO = true;
 
 let GAME_TIMEOUT = 10;
 
+let IS_ARDUINO_OK = false;
+
 let backgroundAsset = "assets/fondspatial.png";
 
 let step = null;
@@ -17,6 +19,13 @@ let playingvideointro = false;
 let videofin;
 let playingvideofin = false;
 
+let asteroidtouche;
+let pileattrapee;
+let batterierecue;
+let axogame;
+let axonautegame;
+
+let futura, montserrat;
 
 let gameState = step;
 
@@ -70,25 +79,10 @@ let lastGameDuration;
 
 let timerTimeout;
 
-function setup() {
-  createCanvas(1280, 720);
-  ellipseMode(CENTER);
-  imageMode(CENTER);
-  rectMode(CENTER);
-  noStroke();
-  noCursor();
+let timerGiveUp;
 
-  asteroidPos = createVector(-100, 100);
+function preload() {
 
-  videointro = createVideo(["assets/video_debut.mp4"]);
-  //videointro.size(width, height);
-  videointro.onended(function () { setStep(2) });
-  videointro.hide();
-
-  videofin = createVideo(["assets/videofin.mp4"]);
-  //videofin.size(width, height);
-  videofin.onended(function () { setStep(4) });
-  videofin.hide();
 
   spaceship = loadImage("assets/vaisseau.png");
   energieoffpink = loadImage("assets/off_pink.png");
@@ -103,13 +97,45 @@ function setup() {
   validationpink = loadImage("assets/validationpink.png");
   validationblue = loadImage("assets/validationblue.png");
 
+  batterierecue = loadSound('assets/le_vaisseau_a_recu_une_batterie.mp3');
+  pileattrapee = loadSound('assets/axonaute_a_pris_une_batterie.mp3');
+  asteroidtouche = loadSound('assets/Axonaute_touche.mp3');
+  axogame = loadSound('assets/axo_game.mp3');
+
+
   dropzonered = loadImage("assets/dropzone-red.png");
   dropzoneblue = loadImage("assets/dropzone-blue.png");
 
   indicatorred = loadImage("assets/indicator-red.png");
   indicatorblue = loadImage("assets/indicator-blue.png");
 
+  futura = loadFont("assets/fr-bold.ttf");
+  montserrat = loadFont("assets/Montserrat-Light.ttf")
   backgroundAsset = loadImage(backgroundAsset);
+}
+
+function setup() {
+  createCanvas(1280, 720);
+  ellipseMode(CENTER);
+  imageMode(CENTER);
+  rectMode(CENTER);
+  noStroke();
+
+  if (!DEBUG) {
+    noCursor();
+  }
+
+  asteroidPos = createVector(-100, 100);
+
+  videointro = createVideo(["assets/video_debut.mp4"]);
+  //videointro.size(width, height);
+  videointro.onended(function() { setStep(2) });
+  videointro.hide();
+
+  videofin = createVideo(["assets/videofin.mp4"]);
+  //videofin.size(width, height);
+  videofin.onended(function() { setStep(4) });
+  videofin.hide();
 
   // On définit les limites des 2 zones de jeu
   /*
@@ -137,16 +163,16 @@ function setup() {
 
   dropZones = {
     A: [
-      createVector(width/2 - 120, height/2 + 140),
-      createVector(width/2 - 240, height/2 + 0),
-      createVector(width/2 - 120, height/2 - 140),
-      createVector(width/2 - 60, height/2 - 200),
+      createVector(width / 2 - 120, height / 2 + 140),
+      createVector(width / 2 - 240, height / 2 + 0),
+      createVector(width / 2 - 120, height / 2 - 140),
+      createVector(width / 2 - 60, height / 2 - 200),
     ],
     B: [
-      createVector(width/2 + 120, height/2 + 140),
-      createVector(width/2 + 240, height/2 + 0),
-      createVector(width/2 + 120, height/2 - 140),
-      createVector(width/2 + 60, height/2 - 200),
+      createVector(width / 2 + 120, height / 2 + 140),
+      createVector(width / 2 + 240, height / 2 + 0),
+      createVector(width / 2 + 120, height / 2 - 140),
+      createVector(width / 2 + 60, height / 2 - 200),
     ],
   }
 
@@ -187,12 +213,42 @@ function draw() {
     push();
     background(0);
     textAlign(CENTER);
-    textSize(40);
-    fill(255);
-    text("Cliquez n'importe où ou presser\r\nune touche de clavier pour démarrer le dispositif", width/2, height/2);
+
+
+    if (ENABLE_ARDUINO) {
+      if (!IS_ARDUINO_OK) {
+        textSize(30);
+        fill(255, 0, 0);
+        text("Arduino non détectée\r\nRechargez la page ou appuyez sur la touche [b] pour connecter", width / 2, height / 2);
+
+      } else {
+        textSize(30);
+        fill(0, 255, 0);
+        text("Arduino détectée\r\nCliquez n'importe où ou presser\r\nune touche de clavier pour démarrer le dispositif", width / 2, height / 2);
+      }
+    }
+    else {
+      textSize(40);
+      fill(255);
+      text("Cliquez n'importe où ou presser\r\nune touche de clavier pour démarrer le dispositif", width / 2, height / 2);
+    }
+
     pop();
-    if (mouseIsPressed || keyIsPressed) {
+    if ((!ENABLE_ARDUINO && (mouseIsPressed || keyIsPressed))
+      || (ENABLE_ARDUINO && IS_ARDUINO_OK)) {
       setStep(0);
+    }
+
+
+    if (ENABLE_ARDUINO) {
+      // changes button label based on connection status
+      if (!port.opened()) {
+        IS_ARDUINO_OK = false;
+        console.log('Waiting for Arduino');
+      } else {
+        IS_ARDUINO_OK = true;
+        //console.log('Connected');
+      }
     }
 
     return;
@@ -215,13 +271,9 @@ function draw() {
 
       // console.log(dist1);
     }
+  } else {
 
-    // changes button label based on connection status
-    if (!port.opened()) {
-      console.log('Waiting for Arduino');
-    } else {
-      //console.log('Connected');
-    }
+    console.log('Mode without Arduino');
   }
 
   if (DEBUG) {
@@ -229,7 +281,6 @@ function draw() {
   }
 
   controlPlayers();
-
 
   showStep();
 }
@@ -254,11 +305,25 @@ function initGame() {
   lastGameDuration = 0;
 
   clearTimeout(timerTimeout);
+
+  timerGiveUp = 0;
+
+  axogame.loop();
 }
 
 
 function game() {
   background(20);
+
+  if (playerRed.alive == false && playerBlue.alive == false) {
+    timerGiveUp++;
+
+    if (timerGiveUp > 900) {
+      setStep(0);
+    }
+  } else {
+    timerGiveUp = 0;
+  }
 
   // draws background image
   image(backgroundAsset, width / 2, height / 2, width, height);
@@ -324,8 +389,8 @@ function controlPlayersWithSliders() {
   let playerBlueHeading = sliderPlayerBlueHeading.value();
   let playerBlueSpeed = sliderPlayerBlueSpeed.value();
 
-  dist1 = playerRedSpeed;
-  dist2 = playerBlueSpeed;
+  dist2 = playerRedSpeed;
+  dist1 = playerBlueSpeed;
   pot1 = playerRedHeading;
   pot2 = playerBlueHeading;
 }
@@ -364,6 +429,10 @@ function keyPressed() {
     if (key == "b") {
       port.open("Arduino", 57600);
     }
+  }
+
+  if (key == "l") {
+    setStep(3);
   }
 }
 

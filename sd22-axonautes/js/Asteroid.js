@@ -62,27 +62,3 @@ function setNewAsteroidPosition() {
   directionasteroidy = random(-2, 2);
 }
 
-/* let freeze = 0
-
-this.checkCollision = function() {
-    let player = playerRedtouche;
-    if(this.zoneId=='B'){
-      player = playerBluetouche;
-    }
-      if (p5.Vector.dist(player.pos, this.pos)
-          <= (player.hitzoneDiam + this.hitzoneDiam) / 2) {
-          timerFreeze++;
-           if (timerFreeze > 120) {
-        (1);
-      }
-    } else {
-      waitTimer = 0;
-    }
-       }
-  };
-
- if (playerRedtouche == true
-      or playerBluetouche == true){
-    freeze++;
-    if(freeze>120){
-      freeze=0;*/
