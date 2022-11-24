@@ -1,5 +1,6 @@
 
 
+
 const TIMEOUT_DURATION = 10; // TODO: more time after videos
 const GAME_DURATION = 90;
 const ASTEROID_SCALE = 50;
@@ -114,14 +115,16 @@ function initGame() {
 
   globalShake = 0;
 
-  musiqueJeu.stop();
-  musiqueJeu.loop();
+  //musiqueJeu.stop();
+  //musiqueJeu.loop();
 
   DELAY_BETWEEN_ASTEROIDS = 400;
 }
 
 function preload() {
   typo = loadFont('assets/UpheavalPro.otf');
+
+  /*
   sonImpactVaisseau = loadSound("assets/sonexplosion.wav"); // son explosion de l'asteroide
   // ♬ Chargement deS SONS
   musiqueIntro = loadSound("music/acceuil.mp3");
@@ -132,6 +135,7 @@ function preload() {
 
   laser = loadSound("assets/laser.mp3");
   sonexplosionAsteroide = loadSound("assets/sonexplosion.wav");
+  */
 
   selection_du_pilote.setVolume(0.6);
   selection_du_copilote.setVolume(0.6);
@@ -423,7 +427,7 @@ function keyPressed() {
     if (keyCode === 65) {
        image(pilote, 1250, 0, 560, 901);
       if (opacityPilot != 255) {
-        selection_du_pilote.play(); // ♬ ajoute un SFX lorsque le pilote est choisis
+        //selection_du_pilote.play(); // ♬ ajoute un SFX lorsque le pilote est choisis
         opacityPilot = 255;
       }
     }
@@ -431,7 +435,7 @@ function keyPressed() {
     if (keyCode === 66) {
       image(copilote, 50, 0, 700, 901);
       if (opacityCopilot != 255) {
-        selection_du_copilote.play();
+        //selection_du_copilote.play();
         opacityCopilot = 255;
       }
     }
@@ -454,7 +458,7 @@ function keyPressed() {
     if (keyIsDown(82)) {
       if (canFire == true) {
         player.fire();
-        laser.play();
+        //laser.play();
         canFire = false;
       }
     }
@@ -499,7 +503,7 @@ function mousePressed() {
 
   if (STEP == PLAY) {
     player.fire();
-    laser.play();
+    //laser.play();
   }
 }
 
@@ -567,13 +571,13 @@ function setStep(newStep) {
   if (!EVENTS_READY) return;
 
   // disable potentially playing sounds by default
-  musiqueIntro.pause();
+  //musiqueIntro.pause();
 
   // waiting screen
   if (STEP == SLEEP) {
-    musiqueIntro.stop();
-    musiqueIntro.loop(); // ♬ loop de la musique
-    musiqueIntro.setVolume(SLEEP_VOLUME);
+    //musiqueIntro.stop();
+    //musiqueIntro.loop(); // ♬ loop de la musique
+    //musiqueIntro.setVolume(SLEEP_VOLUME);
 
     sleepTimer = SLEEP_TIMER_DURATION;
     opacityCopilot = SLEEP_PLAYERS_OPACITY;
@@ -636,6 +640,6 @@ function setStep(newStep) {
   }
 
   if (STEP != PLAY) {
-    musiqueJeu.stop();
+    //musiqueJeu.stop();
   }
 }

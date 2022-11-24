@@ -116,7 +116,7 @@ function setStep(newStep) {
   if (newStep == 2) {
     initGame();
   } else {
-    axogame.stop();
+    //axogame.stop();
   }
 
   if (newStep == 3) {

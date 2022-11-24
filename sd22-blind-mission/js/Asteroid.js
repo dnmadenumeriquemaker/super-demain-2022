@@ -121,7 +121,7 @@ function Asteroid() {
       else {
         push();
         blendMode(SCREEN);
-        glitch.play();
+        //glitch.play();
         image(glitch, 960, 540, 1920, 1080);
         pop();
       }
@@ -150,8 +150,8 @@ function Asteroid() {
 
     this.firePosition = [player.x, player.y];
 
-    sonexplosionAsteroide.stop();
-    sonexplosionAsteroide.play();
+    //sonexplosionAsteroide.stop();
+    //sonexplosionAsteroide.play();
 
     DELAY_BETWEEN_ASTEROIDS -= 20;
     DELAY_BETWEEN_ASTEROIDS = max(DELAY_BETWEEN_ASTEROIDS, 120);

@@ -57,8 +57,8 @@ function Player() {
   }
 
   this.collideWithAsteroid = function () {
-    sonImpactVaisseau.stop();
-    sonImpactVaisseau.play();
+    //sonImpactVaisseau.stop();
+    //sonImpactVaisseau.play();
     
     collisions = collisions + 1;
     if (collisions > 0) {
