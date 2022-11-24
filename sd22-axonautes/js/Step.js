@@ -11,7 +11,9 @@ function showStep() {
 
     if (playerRed.isHere(dist2)) {
       if (playerRedActive == false) {
-        pileattrapee.play();
+        joueurapresent.pause();
+        joueurapresent.currentTime = 0.00001;
+        joueurapresent.play();
       }
       playerRedActive = true;
     } else {
@@ -20,9 +22,9 @@ function showStep() {
 
     if (playerBlue.isHere(dist1)) {
       if (playerBlueActive == false) {
-        pileattrapee.pause();
-        pileattrapee.currentTime = 0.00001;
-        pileattrapee.play();
+        joueurbpresent.pause();
+        joueurbpresent.currentTime = 0.00001;
+        joueurbpresent.play();
       }
       playerBlueActive = true;
     } else {
