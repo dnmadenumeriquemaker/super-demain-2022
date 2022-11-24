@@ -279,6 +279,8 @@ function Player(zoneId, x, y, heading) {
       this.opacity = 50;
       
       if (this.hittingAsteroid == false) {
+        asteroidtouche.pause();
+        asteroidtouche.currentTime = 0.00001;
         asteroidtouche.play();
       }
       
@@ -312,6 +314,8 @@ function Player(zoneId, x, y, heading) {
   this.hasDropped = function () {
     this.score++;
     this.ableToCapture = true;
+    batterierecue.pause();
+    batterierecue.currentTime = 0.00001;
     batterierecue.play();
   }
 

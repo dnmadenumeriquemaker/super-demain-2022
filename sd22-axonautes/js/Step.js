@@ -20,6 +20,8 @@ function showStep() {
 
     if (playerBlue.isHere(dist1)) {
       if (playerBlueActive == false) {
+        pileattrapee.pause();
+        pileattrapee.currentTime = 0.00001;
         pileattrapee.play();
       }
       playerBlueActive = true;
@@ -115,6 +117,8 @@ function setStep(newStep) {
 
   if (newStep == 2) {
     initGame();
+    axogame.pause();
+    axogame.currentTime = 0.0001;
     axogame.play();
   } else {
     axogame.pause();
