@@ -36,6 +36,7 @@ function setup() {
   noStroke();
   textAlign(CENTER);
   textFont(font);
+  noCursor();
 
   // load sprites
   for (const [spriteName, data] of Object.entries(spritesData)) {
@@ -64,7 +65,14 @@ function setup() {
 
 
 function draw() {
-  console.log(frameRate());
+  var pxgif = 355;
+  var pxtext = width / 2;
+
+  var py1text = height / 2 - 200;
+  var pygif = height / 2 + 0;
+  var py2text = height / 2 + 370;
+
+  //console.log(frameRate());
   background(0);
 
   game.frameCountOfStep++;
@@ -88,31 +96,37 @@ function draw() {
 
     pop();
     push();
-    fill('#3d008f')
+    fill('#3d008f');
+
     if (game.is(WAITING)) {
 
-      image(gifGauche, 250, 100, 1200 / 2, 675 / 2);
+      image(gifGauche, pxgif, pygif, 1200 / 2, 675 / 2);
       //fill(255);
-      textSize(32);
-      text('On attend un joueur !', width / 2, height / 2);
-      textSize(24);
-      text('Asseyez-vous et penchez le caddie à gauche pour commencer', width / 2, height / 2 + 70);
+      textSize(64);
+      text('Asseyez-vous\ndans le caddie !', pxtext, py1text);
+      textSize(50);
+      text('Penchez le caddie à gauche\npour commencer', width / 2, py2text);
 
     }
 
     if (game.is(ONBOARDING_1)) {
       //fill(255);
-      text('Maintenant, penchez le caddie à droite', width / 2, height / 2);
+      textSize(50);
+      image(gifDroite, pxgif, pygif, 1200 / 2, 675 / 2);
+      text('Maintenant,\npenchez le caddie à droite', pxtext, py1text);
     }
 
     if (game.is(ONBOARDING_2)) {
       //fill(255);
-      text('Maintenant, redressez le caddie', width / 2, height / 2);
+      textSize(50);
+      image(gifNeutre, pxgif, pygif, 1200 / 2, 675 / 2);
+      text('Maintenant,\nredressez le caddie', pxtext, py1text);
     }
 
     if (game.is(ONBOARDING_4)) {
       //fill(255);
-      text('Fuyez avec le caddie plein en évitant tous les obstacles !', width / 2, height / 2);
+      textSize(50);
+      text('Fuyez avec le caddie plein\nen évitant tous les obstacles !', pxtext, py1text);
       //image(barriere, 0, 0); // Kévin pour Corentin : ?
       //mettre le logo
     }

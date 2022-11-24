@@ -7,7 +7,7 @@ const WAYS_X = [0, 300, 600];
 const PLAYER_BACK_TOLERANCE = 70;
 const GAME_DURATION = 60;
 const GAME_SPEED = 10; // 10 //rapiditerdu  jeus
-const GAME_END_HITZONE_Y = -100;
+const GAME_END_HITZONE_Y = -120; //la fin du jeu fasse au barage a quel distance hay l'écran de fin
 
 const WAITING = 0; // ask to bend left
 const ONBOARDING_1 = 1; // is bqending left, ask to bend right
@@ -37,6 +37,7 @@ let imagesList = [ //il faut remplacer tout le magasin
   'magasin-sortie',
   'route',
   'route-fin',
+  'barre-timer'
 ];
 
 let obstaclesData = { //définie la taille des images obstacles

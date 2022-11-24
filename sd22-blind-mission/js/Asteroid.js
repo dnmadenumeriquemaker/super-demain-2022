@@ -148,7 +148,7 @@ function Asteroid() {
     this.fired = true;
     this.spriteExplosion.playOnce();
 
-    this.firePosition = [player.x, player.y];
+    this.firePosition = [mouseX, mouseY];
 
     sonexplosionAsteroide.stop();
     sonexplosionAsteroide.play();
