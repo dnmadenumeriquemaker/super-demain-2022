@@ -31,8 +31,8 @@ function preload() {
 
 
 function setup() {
-  //createCanvas(720,1280);
-  createCanvas(1280, 720);
+  //createCanvas(1280, 720);
+  createCanvas(1280, 1800);
   noStroke();
   textAlign(CENTER);
   textFont(font);
@@ -64,6 +64,7 @@ function setup() {
 
 
 function draw() {
+  console.log(frameRate());
   background(0);
 
   game.frameCountOfStep++;

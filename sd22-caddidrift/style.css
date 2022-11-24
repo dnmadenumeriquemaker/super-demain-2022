@@ -13,3 +13,10 @@ html, body {
   height:720px;
   background:black;
 }
+
+main {
+  position:absolute;
+  top:170px;
+  left:0;
+  transform:rotateZ(90deg) scale(0.8);
+}
