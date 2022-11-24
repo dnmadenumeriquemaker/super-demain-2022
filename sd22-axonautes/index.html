@@ -1,21 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script src="p5.js"></script>
-    <script src="p5.sound.min.js"></script>
-    <script src="p5.web-serial.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta charset="utf-8" />
 
-  </head>
-  <body>
-    <main>
-    </main>
-    <script src="js/Player.js"></script>
-    <script src="js/Item.js"></script>
-    <script src="js/Asteroid.js"></script>
-    <script src="js/Spaceship.js"></script>
-    <script src="js/Game.js"></script>
-    <script src="js/Step.js"></script>
-  </body>
+<head>
+  <script src="p5.js"></script>
+  <script src="p5.sound.min.js"></script>
+  <script src="p5.web-serial.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="utf-8" />
+
+</head>
+
+<body>
+  <main>
+  </main>
+
+
+
+  <audio id="batterierecue" preload src="./assets/le_vaisseau_a_recu_une_batterie.mp3"></audio>
+  <audio id="pileattrapee" preload src="./assets/axonaute_a_pris_une_batterie.mp3"></audio>
+  <audio id="asteroidtouche" preload src="./assets/Axonaute_touche.mp3"></audio>
+  <audio id="axogame" preload loop src="./assets/axo_game.mp3"></audio>
+
+  <script src="js/Player.js"></script>
+  <script src="js/Item.js"></script>
+  <script src="js/Asteroid.js"></script>
+  <script src="js/Spaceship.js"></script>
+  <script src="js/Game.js"></script>
+  <script src="js/Step.js"></script>
+</body>
+
 </html>

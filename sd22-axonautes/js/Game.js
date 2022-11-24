@@ -83,6 +83,12 @@ let timerGiveUp;
 
 function preload() {
 
+  // Sounds
+
+  batterierecue = document.getElementById('batterierecue');
+  pileattrapee = document.getElementById('pileattrapee');
+  asteroidtouche = document.getElementById('asteroidtouche');
+  axogame = document.getElementById('axogame');
 
   spaceship = loadImage("assets/vaisseau.png");
   energieoffpink = loadImage("assets/off_pink.png");
@@ -97,10 +103,6 @@ function preload() {
   validationpink = loadImage("assets/validationpink.png");
   validationblue = loadImage("assets/validationblue.png");
 
-  batterierecue = loadSound('assets/le_vaisseau_a_recu_une_batterie.mp3');
-  pileattrapee = loadSound('assets/axonaute_a_pris_une_batterie.mp3');
-  asteroidtouche = loadSound('assets/Axonaute_touche.mp3');
-  axogame = loadSound('assets/axo_game.mp3');
 
 
   dropzonered = loadImage("assets/dropzone-red.png");
@@ -176,10 +178,7 @@ function setup() {
     ],
   }
 
-
   initGame();
-
-
 
   if (ENABLE_ARDUINO) {
 
@@ -287,6 +286,7 @@ function draw() {
 
 
 function initGame() {
+  console.log('init game');
   players = [];
   // On crée nos 2 joueurs
   playerRed = new Player('A'); // à gauche
@@ -308,7 +308,6 @@ function initGame() {
 
   timerGiveUp = 0;
 
-  axogame.loop();
 }
 
 

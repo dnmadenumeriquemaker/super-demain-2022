@@ -115,8 +115,10 @@ function setStep(newStep) {
 
   if (newStep == 2) {
     initGame();
+    axogame.play();
   } else {
-    axogame.stop();
+    axogame.pause();
+    axogame.currentTime = 0.0001;
   }
 
   if (newStep == 3) {
