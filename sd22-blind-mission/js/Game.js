@@ -5,7 +5,7 @@ const GAME_DURATION = 90;
 const ASTEROID_SCALE = 50;
 let DELAY_BETWEEN_ASTEROIDS;
 
-const ENABLE_MICRO = false;
+const ENABLE_MICRO = true;
 const SLEEP_TIMER_DURATION = 100;
 const SLEEP_PLAYERS_OPACITY = 65;
 
@@ -290,18 +290,18 @@ function draw() {
     //☺ à mettre en opacité 50% et lorsque le présumé pilote clique sur le bouton start -> opacité à 100 % de l'image pour dire qu'il a bien cliqué dessus.(en attente aussi du co-pilote)
 
     push();
-    blendMode(MULTIPLY); // mode de fusion
-    tint(255, 127);
-    image(overlay_scanline, 30, 0, 0); // overlay rajouter effets de scanline retro
+    //blendMode(MULTIPLY); // mode de fusion
+    //tint(255, 127);
+    //image(overlay_scanline, 30, 0, 0); // overlay rajouter effets de scanline retro
     pop();
 
     push();
-    tint(255, opacityPilot);
+    //tint(255, opacityPilot);
     image(pilote, 50, 0, 560, 901);
     pop();
 
     push();
-    tint(255, opacityCopilot);
+    //tint(255, opacityCopilot);
     image(copilote, 1250, 0, 700, 901);
     pop();
 
@@ -324,8 +324,9 @@ function draw() {
       rect(0, 0, width, height);
       pop();
 
-      musiqueIntro.setVolume(map(sleepTimer, SLEEP_TIMER_DURATION, 0, SLEEP_VOLUME, 0));
-
+      if (musiqueIntro.isPlaying()){
+        musiqueIntro.setVolume(map(sleepTimer, SLEEP_TIMER_DURATION, 0, SLEEP_VOLUME, 0));
+      }
       if (sleepTimer <= 0) {
         setStep(START);
       }
