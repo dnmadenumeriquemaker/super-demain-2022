@@ -109,8 +109,8 @@ function setStep(newStep) {
   }
 
   if (newStep == 1) {
-    //videointro.play();
-    //videointro.volume(0);
+    videointro.play();
+    videointro.volume(0);
   }
 
   if (newStep == 2) {
@@ -120,8 +120,8 @@ function setStep(newStep) {
   }
 
   if (newStep == 3) {
-    //videofin.play();
-    //videofin.volume(0);
+    videofin.play();
+    videofin.volume(0);
   }
 
   if (newStep == 4) {
