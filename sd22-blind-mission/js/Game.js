@@ -333,7 +333,26 @@ function draw() {
   }
 
   if (STEP == PLAY) {
-
+   
+    if (keyIsDown(37)) {
+      player.moveLeft();
+    }
+    if (keyIsDown(39)) {
+      player.moveRight();
+    }
+    if (keyIsDown(38)) {
+      player.moveUp();
+    }
+    if (keyIsDown(40)) {
+      player.moveDown();
+    }
+    if (keyIsDown(32)) {
+      if (canFire == true) {
+        player.fire();
+        laser.play();
+        canFire = false;
+      }
+    }
 
 
     image(fond, 960, 540, 1920, 1080);
@@ -428,29 +447,6 @@ function keyPressed() {
       if (opacityCopilot != 255) {
         selection_du_copilote.play();
         opacityCopilot = 255;
-      }
-    }
-  }
-
-  if (STEP == PLAY) {
-
-    if (keyIsDown(37)) {
-      player.moveLeft();
-    }
-    if (keyIsDown(39)) {
-      player.moveRight();
-    }
-    if (keyIsDown(38)) {
-      player.moveUp();
-    }
-    if (keyIsDown(40)) {
-      player.moveDown();
-    }
-    if (keyIsDown(82)) {
-      if (canFire == true) {
-        player.fire();
-        laser.play();
-        canFire = false;
       }
     }
   }

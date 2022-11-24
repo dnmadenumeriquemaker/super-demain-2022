@@ -16,7 +16,9 @@ html, body {
 
 main {
   position:absolute;
-  top:170px;
-  left:0;
-  transform:rotateZ(90deg) scale(0.8);
+  top:50%;
+  left:50%;
+  transform-origin:center;
+  
+  transform:translate(-50%,-50%) rotateZ(-90deg) scale(0.81);
 }

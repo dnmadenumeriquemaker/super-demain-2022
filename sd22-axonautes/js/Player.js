@@ -13,6 +13,9 @@ function Player(zoneId, x, y, heading) {
   this.zoneId = zoneId;
   this.score = 0;
   this.ableToCapture = true;
+  this.hittingAsteroid = false;
+
+  this.alive = false;
 
   this.opacity = 255;
 
@@ -77,6 +80,9 @@ function Player(zoneId, x, y, heading) {
   }
 
   this.update = function () {
+
+    
+    
     this.opacity += 10;
     this.opacity = min(this.opacity, 255);
     // Pour actualiser la position du joueur,
@@ -271,12 +277,20 @@ function Player(zoneId, x, y, heading) {
     if (p5.Vector.dist(this.pos, asteroidPos)
       <= (this.hitzoneDiam + asteroidsize) / 2) {
       this.opacity = 50;
+      
+      if (this.hittingAsteroid == false) {
+        asteroidtouche.play();
+      }
+      
+      this.hittingAsteroid = true;
 
       if (this.canCapture() == false) {
         this.releaseItem();
       }
-
+    } else {
+      this.hittingAsteroid = false;
     }
+
   }
 
   this.hasCaptured = function (item) {
@@ -298,6 +312,7 @@ function Player(zoneId, x, y, heading) {
   this.hasDropped = function () {
     this.score++;
     this.ableToCapture = true;
+    batterierecue.play();
   }
 
   this.canCapture = function () {
@@ -319,19 +334,24 @@ function Player(zoneId, x, y, heading) {
   this.setSpeed = function (s) {
     if (s <= this.distSpeed1) {
       this.speed = this.speed1;
+      this.alive = true;
     } else if (s > this.distSpeed1 && s <= this.distSpeed2) {
       this.speed = this.speed2;
+      this.alive = true;
     } else if (s > this.distSpeed2 && s <= this.distSpeed3) {
       this.speed = this.speed3;
+      this.alive = true;
     } else if (s > this.distSpeed3 && s <= this.distSpeed4) {
       this.speed = this.speed4;
+      this.alive = true;
     } else {
       // supérieur à this.distSpeed4, donc pas de main détectée
       this.speed = 0;
+      this.alive = false;
     }
   };
 
   this.isHere = function (s) {
-    return s < this.distSpeed4;
+    return s <= this.distSpeed4;
   }
 }
