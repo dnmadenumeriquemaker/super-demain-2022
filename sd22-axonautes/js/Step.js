@@ -91,7 +91,7 @@ function showStep() {
 
     textFont(montserrat);
     textSize(40);
-    text("Vous avez réussi en " + lastGameDuration + " secondes!", width / 2, height / 2);
+    text("Vous avez réussi en " + lastGameDuration + " secondes !", width / 2, height / 2);
     pop();
   }
 }
