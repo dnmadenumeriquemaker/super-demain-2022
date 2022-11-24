@@ -144,12 +144,14 @@ class Game {
     let progressionBarMargin = 30;
 
     fill(255);
-    rect(progressionBarMargin, progressionBarMargin + 40, width - progressionBarMargin * 2, 10);
+    //rect(progressionBarMargin, progressionBarMargin + 40, width - progressionBarMargin * 2, 10);
 
-    let time = map(this.timeCurrent, 0, this.timeMax, 60, width - progressionBarMargin * 2);
+    image(images['barre-timer'], progressionBarMargin, progressionBarMargin + 40);
 
-    fill(0, 0, 255);
-    rect(progressionBarMargin, progressionBarMargin + 40, time, 10);
+    let time = map(this.timeMax, 0, this.timeMax + 1, 60, width - progressionBarMargin * 2 - 90);
+
+    fill('#D33573');
+    rect(progressionBarMargin + 7, progressionBarMargin + 52, time, 8);
 
     image(images['mini-caddie'], time, progressionBarMargin - 20);
   }
@@ -232,7 +234,7 @@ class Game {
   }
 
   amende() {
-    return 10000 - constrain(player.hitCount * 150, 0, 10000);
+    return 10000 - constrain(player.hitCount * 150, 200, 10000);
   }
 
   createObstacle(type = null, way = null) {
