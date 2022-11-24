@@ -207,9 +207,10 @@ function setup() {
 
     animations[spriteName] = animation;
   }
-
+/*
   musiqueJeu.playMode('restart');
   musiqueIntro.playMode('restart');
+  */
 
   if (ENABLE_MICRO === true) {
     navigator.getUserMedia(
