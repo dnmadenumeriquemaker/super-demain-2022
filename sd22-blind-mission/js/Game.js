@@ -168,6 +168,8 @@ function preload() {
   // Chargement illustration : Illus du pilote et du co-pilote
   pilote = loadImage("img/pilote.png");
   copilote = loadImage("img/copilote.png");
+  piloteop = loadImage("img/pilote-opacity.png") ;
+  copiloteop = loadImage("img/copilote-opacity.png") ;
 
   // load spritesheets
   for (const [spriteName, data] of Object.entries(spritesData)) {
@@ -297,12 +299,12 @@ function draw() {
 
     push();
     //tint(255, opacityPilot);
-    image(pilote, 50, 0, 560, 901);
+    image(pilote, 1250, 0, 560, 901);
     pop();
 
     push();
     //tint(255, opacityCopilot);
-    image(copilote, 1250, 0, 700, 901);
+    image(copilote, 50, 0, 700, 901);
     pop();
 
     //Affichage du logo (BlindMission)
@@ -419,6 +421,7 @@ function draw() {
 function keyPressed() {
   if (STEP == SLEEP) {
     if (keyCode === 65) {
+       image(pilote, 1250, 0, 560, 901);
       if (opacityPilot != 255) {
         selection_du_pilote.play(); // ♬ ajoute un SFX lorsque le pilote est choisis
         opacityPilot = 255;
@@ -426,6 +429,7 @@ function keyPressed() {
     }
 
     if (keyCode === 66) {
+      image(copilote, 50, 0, 700, 901);
       if (opacityCopilot != 255) {
         selection_du_copilote.play();
         opacityCopilot = 255;
