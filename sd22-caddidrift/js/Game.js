@@ -72,7 +72,7 @@ class Game {
       }
 
       // More obstacles
-      else if (this.timeCurrent <= 28) {
+      else if (this.timeCurrent > 15 && this.timeCurrent <= 28) {
         let interval = 60;
         if (HARDCORE_MODE) interval = 40;
 
@@ -81,8 +81,12 @@ class Game {
         }
       }
 
+      else if (this.timeCurrent > 28 && this.timeCurrent <= 30) {
+
+      }
+
       // Two barriers at the same time
-      else if (this.timeCurrent > 32 && this.timeCurrent <= 40) {
+      else if (this.timeCurrent > 30 && this.timeCurrent <= 40) {
         let interval = 85;
         if (HARDCORE_MODE) interval = 45;
 
