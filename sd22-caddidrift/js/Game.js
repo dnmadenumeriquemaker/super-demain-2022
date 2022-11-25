@@ -62,21 +62,31 @@ class Game {
 
       // Some obstacles
       else if (this.timeCurrent <= 15) {
-        if ((frameCount - this.timeFramecountStart) % 80 == 0) {
+
+        let interval = 80;
+        if (HARDCORE_MODE) interval = 50;
+
+        if ((frameCount - this.timeFramecountStart) % interval == 0) {
           this.createObstacle();
         } //frameCount permet de un compteur ( à une vitesse donner) mais la quel ???
       }
 
       // More obstacles
       else if (this.timeCurrent <= 30) {
-        if ((frameCount - this.timeFramecountStart) % 60 == 0) {
+        let interval = 60;
+        if (HARDCORE_MODE) interval = 40;
+
+        if ((frameCount - this.timeFramecountStart) % interval == 0) {
           this.createObstacle();
         }
       }
 
-      // Two obstacles at the same time
-      else if (this.timeCurrent <= 40) {
-        if ((frameCount - this.timeFramecountStart) % 85 == 0) { //plus le % est grand plus c' simple
+      // Two barriers at the same time
+      else if (this.timeCurrent > 32 && this.timeCurrent <= 40) {
+        let interval = 85;
+        if (HARDCORE_MODE) interval = 45;
+
+        if ((frameCount - this.timeFramecountStart) % interval == 0) { //plus le % est grand plus c' simple
           /*
           let wayLeft = 0;
 
@@ -97,7 +107,10 @@ class Game {
       }
 
       // Last mile
-      else if (this.timeCurrent <= this.timeMax - 5) {
+      else if (this.timeCurrent <= this.timeMax - 1) {
+        let interval = 55;
+        if (HARDCORE_MODE) interval = 25;
+
         if ((frameCount - this.timeFramecountStart) % 55 == 0) {
           this.createObstacle();
         }
@@ -174,6 +187,13 @@ class Game {
 
     if (step == WAITING) {
       // triggered once
+
+
+      if (HARDCORE_MODE) {
+        GAME_SPEED = 20;
+      } else {
+        GAME_SPEED = 10;
+      }
 
       game.init();
     }

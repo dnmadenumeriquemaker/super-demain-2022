@@ -143,8 +143,8 @@ function draw() {
       //image(barriere, 0, 0); // Kévin pour Corentin : ?
       //mettre le logo
     }
+    pop();
   }
-  pop();
   if (game.is(PLAYING)
     || game.is(PLAYING_END)) {
 
@@ -278,15 +278,8 @@ function keyPressed() {
     game.forceStep(PLAYING_END);
   }
 
-
   if (key == 'v') {
     HARDCORE_MODE = !HARDCORE_MODE;
-
-    if (HARDCORE_MODE) {
-      GAME_SPEED = 16;
-    } else {
-      GAME_SPEED = 10;
-    }
 
     game.forceStep(WAITING);
   }
