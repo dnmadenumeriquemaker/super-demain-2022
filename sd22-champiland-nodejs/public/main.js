@@ -152,6 +152,7 @@ function setup() {
   imageMode(CENTER);
   strokeJoin(ROUND);
   frameRate(30);
+  noCursor();
 
   // load sprites
   for (const [spriteName, data] of Object.entries(spritesData)) {
