@@ -72,7 +72,7 @@ class Game {
       }
 
       // More obstacles
-      else if (this.timeCurrent <= 30) {
+      else if (this.timeCurrent <= 28) {
         let interval = 60;
         if (HARDCORE_MODE) interval = 40;
 
@@ -108,7 +108,7 @@ class Game {
 
       // Last mile
       else if (this.timeCurrent <= this.timeMax - 1) {
-        let interval = 25;
+        let interval = 40;
         if (HARDCORE_MODE) interval = 25;
 
         if ((frameCount - this.timeFramecountStart) % interval == 0) {
