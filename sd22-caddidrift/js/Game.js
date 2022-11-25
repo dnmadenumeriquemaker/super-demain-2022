@@ -20,7 +20,7 @@ class Game {
     this.timeFramecountStart = 0;
     this.nextBackground = 'magasin';
     this.nextStep = null;
-    this.hitCount = 0;
+    player.hitCount = 0;
     clearTimeout(this.timerBeforeNextAction);
     this.timerBeforeNextAction = null;
     this.frameCountOfStep = 0;
@@ -141,6 +141,7 @@ class Game {
 
   showHUD() {
 
+    /*
     let progressionBarMargin = 30;
 
     fill(255);
@@ -148,12 +149,13 @@ class Game {
 
     image(images['barre-timer'], progressionBarMargin, progressionBarMargin + 40);
 
-    let time = map(this.timeMax, 0, this.timeMax + 1, 60, width - progressionBarMargin * 2 - 90);
+    let time = map(this.timeCurrent, 0, this.timeMax + 1, 60, width - progressionBarMargin * 2 - 90);
 
     fill('#D33573');
     rect(progressionBarMargin + 7, progressionBarMargin + 52, time, 8);
 
     image(images['mini-caddie'], time, progressionBarMargin - 20);
+    */
   }
 
   setStep(step) {

@@ -160,10 +160,13 @@ function draw() {
 
 
     push();
-    textSize(18);
-    textAlign(LEFT);
-    fill('#3d008f');
-    text("votre amende est de :" + game.amende(), 30, 100);
+    textSize(64);
+    textAlign(CENTER);
+    strokeJoin(ROUND);
+    strokeWeight(20);
+    stroke('#3d008f');
+    fill(255);
+    text("Amende\n" + game.amende()+" €", width/2, 200);
     pop();
 
     game.showHUD();
