@@ -1,10 +1,18 @@
 html, body {
   margin: 0;
   padding: 0;
-  background:black;
+  background:#6FBFDE;
 }
 canvas {
   display: block;
+  /*
   width:800px !important;
   height:800px !important;
+  */
+  width:600px !important;
+  height:600px !important;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(calc(-50% - 100px), -50%);
 }

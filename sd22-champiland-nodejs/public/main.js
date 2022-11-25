@@ -14,6 +14,7 @@ let countdown;
 let timerPlayRemaining;
 let timerPlay = null;
 let timerAction = null;
+let timerEnd = null;
 
 let animationTimeAction = 0;
 
@@ -187,9 +188,9 @@ function setup() {
 
   }
 
-  //setStep(STEP_WAIT);
+  setStep(STEP_WAIT);
   //setStep(STEP_COUNTDOWN);
-  setStep(STEP_PLAY);
+  //setStep(STEP_PLAY);
 
 
 }
@@ -317,18 +318,31 @@ function draw() {
 
   if (step == STEP_END) {
     // end
+    push();
+    fill(255);
+    textSize(280);
+    textAlign(CENTER);
+    stroke(0);
+    strokeWeight(60);
+    translate(width / 2, height / 2 + map(cos(frameCount / 5), -1, 1, 75, 100));
+    
+    text('Bravo !', 0, -400);
+    scale(map(cos(frameCount / 5), -1, 1, 0.8, 1));
+    text(score, 0, 0);
+    pop();
   }
 
-  // DEBUG
+  // DEBUGkkk
   push();
   let sw = 600;
 
-  stroke(0);
+  stroke('#6FBFDE');
   strokeWeight(sw);
   noFill();
   circle(width / 2, height / 2, 2160 + sw);
   pop();
 }
+
 /*
 function mousePressed() {
   if (step == STEP_END) {
@@ -355,13 +369,12 @@ function keyPressed() {
   }
 
   if (step == STEP_WAIT) {
-    if (key == 'g') {
+    // bleu : g
+
+    if (key == 'g' || key == 'n' || key == 's') {
       setStep(STEP_COUNTDOWN);
     }
   }
-// bleu : g
-// orange : 
-// violet : 
 
   if (step == STEP_PLAY) {
     for (const [buttonLetter, buttonLedPin] of Object.entries(buttons)) {
@@ -397,6 +410,9 @@ function setStep(newStep) {
   }
 
   if (newStep == STEP_COUNTDOWN) {
+    console.log('countdown client');
+    socket.emit(`countdown`);
+
     countdown = 3;
 
     clearInterval(timerCountdown);
@@ -439,6 +455,11 @@ function setStep(newStep) {
   if (newStep == STEP_END) {
     console.log('endGame client');
     socket.emit(`endGame`);
+
+    clearInterval(timerEnd);
+    timerEnd = setTimeout(function () {
+      setStep(STEP_WAIT);
+    }, 5000);
   }
 }
 

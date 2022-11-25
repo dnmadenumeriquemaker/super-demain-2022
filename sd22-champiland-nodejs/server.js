@@ -38,6 +38,9 @@ board.on("ready", function () {
       leds[data.ledPin].blink(100);
     });
 
+
+
+
     socket.on('endGame', function () {
       console.log('endGame');
 
@@ -46,6 +49,9 @@ board.on("ready", function () {
       }
     });
 
+
+
+
     socket.on('waitGame', function () {
       console.log('waitGame');
 
@@ -53,7 +59,31 @@ board.on("ready", function () {
         leds[i].stop().off();
       }
       
-      leds[data.ledPin].blink(100);
+      leds[20].blink(200);
+      leds[36].blink(200);
+      leds[23].blink(200);
+    });
+
+
+
+
+    socket.on('countdown', function () {
+      console.log('countdown');
+
+      for (let i = 14; i <= 40 ; i++) {
+        leds[i].stop().off().blink(1000);
+      }
+    });
+
+
+
+
+    socket.on('off', function () {
+      console.log('off');
+
+      for (let i = 14; i <= 40 ; i++) {
+        leds[i].stop().off();
+      }
     });
 
   });
