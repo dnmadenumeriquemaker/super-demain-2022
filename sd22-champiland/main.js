@@ -206,7 +206,9 @@ function draw() {
       //console.log('Connected');
     }
 
-    port.write(16);
+    if (IS_ARDUINO_OK) {
+      port.write(16);
+    }
 
     /*
     
