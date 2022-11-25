@@ -4,7 +4,7 @@ let giFNeutre;
 
 function preload() {
   // load images data
-  imagesList.forEach(function(imageName) {
+  imagesList.forEach(function (imageName) {
     images[imageName] = loadImage('assets/' + imageName + '.png');//raccourcie pour appeler toute les image qui sont dans le groupe assets ??!
   });
   gifNeutre = loadImage("gif/position-neutre.gif");
@@ -166,7 +166,7 @@ function draw() {
     strokeWeight(20);
     stroke('#3d008f');
     fill(255);
-    text("Amende\n" + game.amende()+" €", width/2, 200);
+    text("Amende\n" + game.amende() + " €", width / 2, 200);
     pop();
 
     game.showHUD();
@@ -178,20 +178,30 @@ function draw() {
     push();
     fill('#000000');
     rect(0, 0, width, height);
+    textAlign(CENTER);
 
     if (game.frameCountOfStep > 60) {
       fill('#fe95df');
       textAlign(CENTER);
       textSize(120);
-      text('Under arrest', width / 2-100 + 150, 500);
+      text('UNDER ARREST', width / 2, 800);
     }
 
     if (game.frameCountOfStep > 120) {
-      image(banière, 350, 10);
+      imageMode(CENTER);
+      image(banière, width / 2, 400);
       fill('#fe95df');
       textAlign(CENTER);
-      textSize(40);
-      text('Votre amende est de ' + game.amende() + ' €', width / 2-170, 600);
+      textSize(90);
+      text('Votre amende\nest de', width / 2, 1000);
+
+      textSize(140);
+      textAlign(CENTER);
+      strokeJoin(ROUND);
+      strokeWeight(20);
+      stroke('#3d008f');
+      fill(255);
+      text(game.amende() + ' €', width / 2, 1300);
     }
 
     if (game.frameCountOfStep > 1500) { //après un certain temps

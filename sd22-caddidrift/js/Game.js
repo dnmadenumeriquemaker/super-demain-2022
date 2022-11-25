@@ -236,7 +236,7 @@ class Game {
   }
 
   amende() {
-    return 10000 - constrain(player.hitCount * 150, 200, 10000);
+    return 10000 - constrain(player.hitCount * 150, 0, 9800);
   }
 
   createObstacle(type = null, way = null) {
