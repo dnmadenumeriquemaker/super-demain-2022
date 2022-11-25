@@ -13,7 +13,8 @@ const io = require('socket.io')(server);
 let leds = [];
 
 var board = new five.Board({
-  port: '/dev/tty.usbmodem113201'
+ // port: '/dev/tty.usbmodem113201'
+ port : 'COM8',
 });
 
 let lastLedPin = null;
