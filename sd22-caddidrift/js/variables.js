@@ -6,7 +6,7 @@ const WAYS_X = [0, 300, 600];
 
 const PLAYER_BACK_TOLERANCE = 70;
 const GAME_DURATION = 60;
-const GAME_SPEED = 10; // 10 //rapiditerdu  jeus
+let GAME_SPEED = 10; // 10 //rapiditerdu  jeus
 const GAME_END_HITZONE_Y = -120; //la fin du jeu fasse au barage a quel distance hay l'écran de fin
 
 const WAITING = 0; // ask to bend left
@@ -18,6 +18,8 @@ const ONBOARDING_5 = 5; // countdown over: outside of the store
 const PLAYING = 6; // is playing: starts timer //pas compris se que c'était
 const PLAYING_END = 7; // police barrier
 const ENDING = 8;
+
+let HARDCORE_MODE = false;
 
 let player;
 let game;

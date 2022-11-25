@@ -174,6 +174,7 @@ class Game {
 
     if (step == WAITING) {
       // triggered once
+
       game.init();
     }
 
@@ -222,6 +223,7 @@ class Game {
       clearInterval(this.timer);
       clearTimeout(this.timerBeforeNextAction);
       backgrounds = [];
+      HARDCORE_MODE = false;
 
       // TODO: impression ticket
     }

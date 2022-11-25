@@ -107,6 +107,19 @@ function draw() {
       textSize(50);
       text('Penchez le caddie à gauche\npour commencer', width / 2, py2text);
 
+      if (HARDCORE_MODE) {
+        push();
+        translate(width/2, 500);
+        textSize(120);
+        textAlign(CENTER);
+        fill(255,0,0);
+        strokeWeight(20);
+        stroke(255);
+        scale(map(cos(frameCount / 5), -1, 1, .9, 1.15));
+        text('DRIFT MODE', 0, 0);
+        pop();
+      }
+
     }
 
     if (game.is(ONBOARDING_1)) {
@@ -263,6 +276,19 @@ function keyPressed() {
 
   if (key == 'e') {
     game.forceStep(PLAYING_END);
+  }
+
+
+  if (key == 'v') {
+    HARDCORE_MODE = !HARDCORE_MODE;
+
+    if (HARDCORE_MODE) {
+      GAME_SPEED = 16;
+    } else {
+      GAME_SPEED = 10;
+    }
+
+    game.forceStep(WAITING);
   }
 }
 
