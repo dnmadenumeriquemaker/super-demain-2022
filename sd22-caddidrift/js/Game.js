@@ -108,8 +108,8 @@ class Game {
 
       // Last mile
       else if (this.timeCurrent <= this.timeMax - 1) {
-        let interval = 55;
-        if (HARDCORE_MODE) interval = 25;
+        let interval = 35;
+        if (HARDCORE_MODE) interval = 15;
 
         if ((frameCount - this.timeFramecountStart) % 55 == 0) {
           this.createObstacle();
