@@ -460,7 +460,7 @@ function setStep(newStep) {
     clearInterval(timerEnd);
     timerEnd = setTimeout(function () {
       setStep(STEP_WAIT);
-    }, 5000);
+    }, 10000);
   }
 }
 

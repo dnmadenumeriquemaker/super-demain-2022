@@ -45,7 +45,7 @@ board.on("ready", function () {
       console.log('endGame');
 
       for (let i = 14; i <= 40 ; i++) {
-        leds[i].stop().off();
+        leds[i].stop().off().blink(200);
       }
     });
 
