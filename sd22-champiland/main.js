@@ -55,9 +55,14 @@ let scoreTexts = [];
 
 let frameCountPlay;
 
+let ENABLE_ARDUINO = true;
+let IS_ARDUINO_OK = false;
+let port;
+
 const buttons = {
-  'a': 14,
-  'b': 15,
+  // champi bleu
+  'b': 14,
+  'q': 15,
   'c': 16,
   'd': 17,
   'e': 18,
@@ -65,31 +70,34 @@ const buttons = {
   'g': 20,
   'h': 21,
   'i': 22,
-  'j': 23,
-  'k': 24,
-  'l': 25,
-  'm': 26,
-  'n': 27,
-  'o': 28,
-  'p': 29,
-  'q': 30,
-  'r': 31,
-  's': 32,
-  't': 33,
-  'u': 34,
-  'v': 35,
-  'w': 36,
-  'x': 37,
-  'y': 38,
-  'z': 39,
-  'A': 40,
-  'B': 41,
-  'C': 42,
+
+  // champi orange
+  's': 23,
+  't': 24,
+  //'l': 25, // BROKEN
+  'v': 26,
+  'z': 27,
+  'x': 28,
+  'y': 29,
+  'w': 30,
+  '7': 31,
+
+  // champi violet
+  'j': 32,
+  'k': 33,
+  'l': 34,
+  ',': 35,
+  'n': 36,
+  'o': 37,
+  'p': 38,
+  'a': 39,
+  'r': 40,
 }
 
 const buttonsLetters = [
-  'a',
+  // champi bleu
   'b',
+  'q',
   'c',
   'd',
   'e',
@@ -97,26 +105,28 @@ const buttonsLetters = [
   'g',
   'h',
   'i',
+
+  // champi orange
+  's',
+  't',
+  //'l': 25, // BROKEN
+  'v',
+  'z',
+  'x',
+  'y',
+  'w',
+  '7',
+
+  // champi violet
   'j',
   'k',
   'l',
-  'm',
+  ',',
   'n',
   'o',
   'p',
-  'q',
+  'a',
   'r',
-  's',
-  't',
-  'u',
-  'v',
-  'w',
-  'x',
-  'y',
-  'z',
-  'A',
-  'B',
-  'C',
 ];
 
 function preload() {
@@ -162,6 +172,21 @@ function setup() {
   fleur2 = new Fleur(1960, 1000);
   fleur3 = new Fleur(250, 1320);
 
+
+  if (ENABLE_ARDUINO) {
+
+    port = createSerial();
+
+    // in setup, we can open ports we have used previously
+    // without user interaction
+
+    let usedPorts = usedSerialPorts();
+    if (usedPorts.length > 0) {
+      port.open(usedPorts[0], 57600);
+    }
+
+  }
+
   //setStep(STEP_WAIT);
   //setStep(STEP_COUNTDOWN);
   setStep(STEP_PLAY);
@@ -170,6 +195,41 @@ function setup() {
 }
 
 function draw() {
+
+  if (ENABLE_ARDUINO) {
+    // changes button label based on connection status
+    if (!port.opened()) {
+      IS_ARDUINO_OK = false;
+      console.log('Waiting for Arduino');
+    } else {
+      IS_ARDUINO_OK = true;
+      //console.log('Connected');
+    }
+
+    port.write(16);
+
+    /*
+    
+    let value = port.readUntil("\n");
+
+    if (value.length > 0) {
+      let values = value.split('/');
+
+      //console.log(values);
+
+      pot1 = int(values[0]);
+      pot2 = int(values[1]);
+      dist1 = int(values[2]);
+      dist2 = int(trim(values[3]));
+
+      // console.log(dist1);
+    }
+    */
+  } else {
+    console.log('Mode without Arduino');
+  }
+
+
   background(colorBlue);
   //fill(colorBlue);
   //noStroke();
@@ -284,6 +344,14 @@ function mousePressed() {
 }
 
 function keyPressed() {
+
+  if (ENABLE_ARDUINO) {
+    if (key == "b") {
+      port.open("Arduino", 57600);
+    }
+  }
+
+
   if (step == STEP_PLAY) {
     for (const [buttonLetter, buttonLedPin] of Object.entries(buttons)) {
       if (key == buttonLetter) {
@@ -318,7 +386,7 @@ function setStep(newStep) {
     countdown = 3;
 
     clearInterval(timerCountdown);
-    timerCountdown = setInterval(function() {
+    timerCountdown = setInterval(function () {
       countdown--;
       animationTimeAction = 0;
 
@@ -340,7 +408,7 @@ function setStep(newStep) {
 
     clearInterval(timerPlay);
 
-    timerPlay = setInterval(function() {
+    timerPlay = setInterval(function () {
       timerPlayRemaining--;
 
       if (timerPlayRemaining <= 0) {
