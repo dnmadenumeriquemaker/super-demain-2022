@@ -1,9 +1,18 @@
 class Obstacle {
   constructor(type, way) {
     if (way != null) {
-      this.way = way; // 1, 2, 3
+      this.way = way; // 0, 1, 2
     } else {
-      this.way = int(random(3)); // 1, 2, 3
+      //this.way = int(random(3)); // 0, 1, 2
+
+      if (random(1) < 0.6) {
+        this.way = 1; // milieu
+      } else {
+        this.way = 0;
+        if (random(1) > 0.5) {
+          this.way = 2;
+        }
+      }
     }
 
     if (type != null) {

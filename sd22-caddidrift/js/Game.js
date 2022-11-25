@@ -9,6 +9,7 @@ class Game {
     this.nextStep;
     this.timerBeforeNextAction;
     this.frameCountOfStep;
+    this.barriereSide;
   }
 
   init() {
@@ -26,6 +27,7 @@ class Game {
     this.frameCountOfStep = 0;
     obstacles = [];
     this.initBackground();
+    this.barriereSide = 0;
   }
 
   tick() {
@@ -75,20 +77,22 @@ class Game {
       // Two obstacles at the same time
       else if (this.timeCurrent <= 40) {
         if ((frameCount - this.timeFramecountStart) % 85 == 0) { //plus le % est grand plus c' simple
-
+          /*
           let wayLeft = 0;
 
           if (Math.random() < 0.5) {
             wayLeft = 1; //permte un random sur la position ses barière une chance sur 2 qu'il soit sur la voit de D ou G 
           }
-
-          /*
-          let possibleWays = [0, 1, 2];
-          possibleWays = possibleWays.sort((a, b) => 0.5 - Math.random());
           */
 
-          this.createObstacle('barriere-gauche', wayLeft);
-          this.createObstacle('barriere-droite', wayLeft + 1);
+          if (this.barriereSide == 0) {
+            this.barriereSide = 1;
+          } else {
+            this.barriereSide = 0;
+          }
+
+          this.createObstacle('barriere-gauche', this.barriereSide);
+          this.createObstacle('barriere-droite', this.barriereSide + 1);
         }
       }
 
