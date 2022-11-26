@@ -5,7 +5,7 @@ class Obstacle {
     } else {
       //this.way = int(random(3)); // 0, 1, 2
 
-      if (random(1) < 0.6) {
+      if (random(1) < 0.4) {
         this.way = 1; // milieu
       } else {
         this.way = 0;
