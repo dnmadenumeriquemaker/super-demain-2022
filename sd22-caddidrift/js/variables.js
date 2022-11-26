@@ -81,7 +81,7 @@ let spritesData = { //définie la vitesse du spreat
   },
   'caisse': {
     size: [260, 260],
-    frames: 8,
+    frames: 5,
     speed: 0.3,
   },
   'huile': {
