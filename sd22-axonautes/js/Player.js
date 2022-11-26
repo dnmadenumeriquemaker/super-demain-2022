@@ -182,7 +182,7 @@ function Player(zoneId, x, y, heading) {
       pop();
     }
 
-    if (this.hasFinished == false) {
+    if (this.hasFinished == true) {
       push();
       rotate(radians(90));
 
