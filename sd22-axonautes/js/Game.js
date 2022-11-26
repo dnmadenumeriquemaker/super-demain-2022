@@ -25,6 +25,8 @@ let batterierecue;
 let axogame;
 let axonautegame;
 
+let couronne;
+
 let futura, montserrat;
 
 let gameState = step;
@@ -102,6 +104,8 @@ function preload() {
   waitvalidationblue = loadImage("assets/waitvalidationblue.png");
   validationpink = loadImage("assets/validationpink.png");
   validationblue = loadImage("assets/validationblue.png");
+
+  couronne = loadImage("assets/couronne.png");
 
 
 

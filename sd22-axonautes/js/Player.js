@@ -14,6 +14,7 @@ function Player(zoneId, x, y, heading) {
   this.score = 0;
   this.ableToCapture = true;
   this.hittingAsteroid = false;
+  this.hasFinished = false;
 
   this.alive = false;
 
@@ -81,8 +82,8 @@ function Player(zoneId, x, y, heading) {
 
   this.update = function () {
 
-    
-    
+
+
     this.opacity += 10;
     this.opacity = min(this.opacity, 255);
     // Pour actualiser la position du joueur,
@@ -178,6 +179,14 @@ function Player(zoneId, x, y, heading) {
 
       rotate(radians(180));
       image(this.capturedItem.img, -35, 0, 20 * batterySize, 50 * batterySize);
+      pop();
+    }
+
+    if (this.hasFinished == false) {
+      push();
+      rotate(radians(90));
+
+      image(couronne, 2, -25, 70/3, 44/3);
       pop();
     }
 
@@ -277,13 +286,13 @@ function Player(zoneId, x, y, heading) {
     if (p5.Vector.dist(this.pos, asteroidPos)
       <= (this.hitzoneDiam + asteroidsize) / 2) {
       this.opacity = 50;
-      
+
       if (this.hittingAsteroid == false) {
         asteroidtouche.pause();
         asteroidtouche.currentTime = 0.00001;
         asteroidtouche.play();
       }
-      
+
       this.hittingAsteroid = true;
 
       if (this.canCapture() == false) {
@@ -314,6 +323,16 @@ function Player(zoneId, x, y, heading) {
   this.hasDropped = function () {
     this.score++;
     this.ableToCapture = true;
+
+    if (this.score >= 5) {
+      if (this == playerRed && playerBlue.hasFinished == false) {
+        this.hasFinished = true;
+      }
+      if (this == playerBlue && playerRed.hasFinished == false) {
+        this.hasFinished = true;
+      }
+    }
+
     batterierecue.pause();
     batterierecue.currentTime = 0.00001;
     batterierecue.play();
