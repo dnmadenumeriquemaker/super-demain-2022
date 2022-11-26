@@ -139,7 +139,7 @@ function draw() {
     if (game.is(ONBOARDING_4)) {
       //fill(255);
       textSize(64);
-      text('Fuyez avec le caddie plein\nen évitant tous les obstacles !', pxtext, py1text);
+      text('Fuyez\navec le caddie plein\nen évitant les obstacles !', pxtext, py1text);
       //image(barriere, 0, 0); // Kévin pour Corentin : ?
       //mettre le logo
     }
