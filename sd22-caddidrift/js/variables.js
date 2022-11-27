@@ -1,4 +1,5 @@
 let DEBUG = false;
+let MAINTENANCE_MODE = false;
 
 const ROAD_WIDTH = 800; //largeur de la zonne de jeu
 const WAY_WIDTH = 200;//largeur des rect de voix

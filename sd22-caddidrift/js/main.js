@@ -100,6 +100,11 @@ function draw() {
 
     if (game.is(WAITING)) {
 
+      if (MAINTENANCE_MODE == true) {
+        textSize(100);
+        text('Maintenance\nen cours', pxtext, py1text);
+      } else{
+
       image(gifGauche, pxgif, pygif, 1200 / 2, 675 / 2);
       //fill(255);
       textSize(64);
@@ -119,6 +124,7 @@ function draw() {
         text('DRIFT MODE', 0, 0);
         pop();
       }
+    }
 
     }
 
@@ -233,6 +239,9 @@ function keyPressed() {
     || game.is(PLAYING)
     || game.is(PLAYING_END)) {
 
+    
+      if (MAINTENANCE_MODE == false) {
+
     if (key == 'q') {
       player.wayLeft();
 
@@ -248,6 +257,8 @@ function keyPressed() {
         game.setStep(ONBOARDING_2);
       }
     }
+
+  }
   }
 
   if (key == ' ') {
@@ -280,6 +291,12 @@ function keyPressed() {
 
   if (key == 'v') {
     HARDCORE_MODE = !HARDCORE_MODE;
+
+    game.forceStep(WAITING);
+  }
+
+  if (key == 'm') {
+    MAINTENANCE_MODE = !MAINTENANCE_MODE;
 
     game.forceStep(WAITING);
   }
