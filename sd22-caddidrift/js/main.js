@@ -179,7 +179,7 @@ function draw() {
     strokeWeight(20);
     stroke('#3d008f');
     fill(255);
-    text("Amende\n" + game.amende() + " €", width / 2, 200);
+    text("Butin\n" + game.butin() + " €", width / 2, 200);
     pop();
 
     game.showHUD();
@@ -206,7 +206,7 @@ function draw() {
       fill('#fe95df');
       textAlign(CENTER);
       textSize(90);
-      text('Votre amende\nest de', width / 2, 1000);
+      text('Votre butin\nest de', width / 2, 1000);
 
       textSize(140);
       textAlign(CENTER);
@@ -214,7 +214,7 @@ function draw() {
       strokeWeight(20);
       stroke('#3d008f');
       fill(255);
-      text(game.amende() + ' €', width / 2, 1300);
+      text(game.butin() + ' €', width / 2, 1300);
     }
 
     if (game.frameCountOfStep > 1500) { //après un certain temps
