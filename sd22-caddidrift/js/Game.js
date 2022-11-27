@@ -265,7 +265,7 @@ class Game {
     return this.step == step;
   }
 
-  amende() {
+  butin() {
     return 10000 - constrain(player.hitCount * 150, 0, 9800);
   }
 
